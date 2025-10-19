@@ -7,15 +7,32 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
+          "path": "src/shared/components",
           "style": "scss"
+        },
+        "@schematics/angular:directive": {
+          "path": "src/shared/directives"
+        },
+        "@schematics/angular:pipe": {
+          "path": "src/shared/pipes"
+        },
+        "@schematics/angular:service": {
+          "path": "src/shared/services"
+        },
+        "@schematics/angular:guard": {
+          "path": "src/shared/guards"
+        },
+        "@schematics/angular:interceptor": {
+          "path": "src/shared/interceptors"
         }
       },
+
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular/build:application",
           "options": {
             "outputPath": "dist/front",
             "index": "src/index.html",
@@ -31,6 +48,11 @@
                 "input": "public"
               }
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles"
+              ]
+            },
             "styles": [
               "src/styles.scss"
             ],
@@ -61,7 +83,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "front:build:production"
@@ -73,10 +95,10 @@
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n"
+          "builder": "@angular/build:extract-i18n"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:karma",
           "options": {
             "polyfills": [
               "zone.js",
