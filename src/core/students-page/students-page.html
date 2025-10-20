@@ -3,4 +3,13 @@
     placeholder="Введите фамилию"
     (searchEvent)="onSearch($event)"
   ></app-search>
+
+  <p-multiselect
+    [options]="faculties"
+    [(ngModel)]="filters.faculties"
+    placeholder="Факультет"
+    optionLabel="name"
+    class="w-full md:w-80 filter"
+    (onChange)="onFacultyChange()"
+  />
 </div>

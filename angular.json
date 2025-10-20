@@ -24,6 +24,9 @@
         },
         "@schematics/angular:interceptor": {
           "path": "src/shared/interceptors"
+        },
+        "@schematics/angular:interface": {
+          "path": "src/shared/interfaces"
         }
       },
 
