@@ -13,3 +13,8 @@
     (onChange)="onFacultyChange()"
   />
 </div>
+<div class="section students-list">
+  @for (student of students; track student.id) {
+    <app-student-card [studentInfo]="student"></app-student-card>
+  }
+</div>

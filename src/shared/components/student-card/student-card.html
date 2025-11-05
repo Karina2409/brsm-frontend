@@ -1,0 +1,10 @@
+<div [class.without__photo-container]="!studentInfo()?.photo" [class.student__photo-container]="studentInfo()?.photo" class="">
+  @if (!studentInfo()?.photo) {
+    <img src="assets/photo.png" alt="БРСМ БГУИР" class="photo">
+  }
+</div>
+
+<div class="info-block">
+  <p class="students__name">{{ studentInfo()?.surname }} {{ studentInfo()?.name }} {{ studentInfo()?.patronymic }}</p>
+  <p class="students__group">{{ studentInfo()?.groupNumber }}</p>
+</div>

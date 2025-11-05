@@ -1,0 +1,46 @@
+@use 'variables' as *;
+
+:host {
+  width: 100%;
+  border: 1px solid $primary-color;
+  border-radius: 20px;
+  display: flex;
+  gap: 20px;
+  padding: 10px;
+  align-items: center;
+}
+
+.without__photo-container {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 1px solid $dark-color;
+  padding: 10px;
+}
+
+.student__photo-container {
+  overflow: hidden;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 1px solid $dark-color;
+}
+
+.photo {
+  width: 100%;
+}
+
+.info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.students__name {
+  font-weight: bold;
+}
+
+.students__group {
+  font-size: 12px;
+  font-weight: 400;
+}
