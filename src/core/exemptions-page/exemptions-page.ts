@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-exemptions-page',
   imports: [],
   templateUrl: './exemptions-page.html',
-  styleUrl: './exemptions-page.scss'
+  styleUrl: './exemptions-page.scss',
 })
-export class ExemptionsPage {
-
-}
+export class ExemptionsPage {}

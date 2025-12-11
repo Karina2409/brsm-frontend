@@ -1,6 +1,7 @@
 {
   "name": "front",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -26,16 +27,27 @@
     "zone.js": "^0.15.1"
   },
   "devDependencies": {
+    "@angular-eslint/eslint-plugin": "^20.7.0",
+    "@angular-eslint/eslint-plugin-template": "^20.7.0",
+    "@angular-eslint/schematics": "^20.7.0",
+    "@angular-eslint/template-parser": "^20.7.0",
     "@angular/build": "^20.3.6",
     "@angular/cli": "^20.3.6",
     "@angular/compiler-cli": "^20.3.6",
+    "@eslint/js": "^9.39.1",
     "@types/jasmine": "~5.1.0",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-formatter-table": "^7.32.1",
+    "eslint-plugin-prettier": "^5.5.4",
     "jasmine-core": "~5.6.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.9.3"
+    "prettier": "^3.7.4",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.49.0"
   }
 }

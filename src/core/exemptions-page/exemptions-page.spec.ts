@@ -8,9 +8,8 @@ describe('ExemptionsPage', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ExemptionsPage]
-    })
-    .compileComponents();
+      imports: [ExemptionsPage],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ExemptionsPage);
     component = fixture.componentInstance;

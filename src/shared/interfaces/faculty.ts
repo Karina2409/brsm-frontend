@@ -1,4 +1,4 @@
-export interface Faculty {
-  name: string,
-  code: string
-}
+export type Faculty = {
+  name: string;
+  code: string;
+};

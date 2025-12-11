@@ -1,19 +1,19 @@
-import {Component, input, output} from '@angular/core';
-import {NgIcon, provideIcons} from '@ng-icons/core';
-import {matSearch} from '@ng-icons/material-icons/baseline';
-import {FormsModule} from '@angular/forms';
+import { Component, input, output } from '@angular/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { matSearch } from '@ng-icons/material-icons/baseline';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-search',
   imports: [NgIcon, FormsModule],
   templateUrl: './search.html',
   styleUrl: './search.scss',
-  viewProviders: [provideIcons({ matSearch })]
+  viewProviders: [provideIcons({ matSearch })],
 })
 export class Search {
-  placeholder = input('');
-  searchEvent = output<string>();
-  surname: string = '';
+  public placeholder = input('');
+  public searchEvent = output<string>();
+  public surname = '';
 
   public search(): void {
     this.searchEvent.emit(this.surname);

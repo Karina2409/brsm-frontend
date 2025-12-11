@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-calendar-page',
   imports: [],
   templateUrl: './calendar-page.html',
-  styleUrl: './calendar-page.scss'
+  styleUrl: './calendar-page.scss',
 })
-export class CalendarPage {
-
-}
+export class CalendarPage {}

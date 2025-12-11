@@ -1,23 +1,22 @@
 import { Routes } from '@angular/router';
-import {ProfilePage} from '@pages/profile-page';
-import {StudentsPage} from '@pages/students-page';
-import {UsersPage} from '@pages/users-page';
-import {EventsPage} from '@pages/events-page';
-import {DocumentsPage} from '@pages/documents-page';
-import {StatisticsPage} from '@pages/statistics-page';
-import {CalendarPage} from '@pages/calendar-page';
-import {PetitionsPage} from '@pages/petitions-page';
-import {ReportsPage} from '@pages/reports-page';
-import {ExemptionsPage} from '@pages/exemptions-page';
-import {SettingsPage} from '@pages/settings-page';
-import {UserActionsPage} from '@pages/user-actions-page';
-
+import { ProfilePage } from '@pages/profile-page';
+import { StudentsPage } from '@pages/students-page';
+import { UsersPage } from '@pages/users-page';
+import { EventsPage } from '@pages/events-page';
+import { DocumentsPage } from '@pages/documents-page';
+import { StatisticsPage } from '@pages/statistics-page';
+import { CalendarPage } from '@pages/calendar-page';
+import { PetitionsPage } from '@pages/petitions-page';
+import { ReportsPage } from '@pages/reports-page';
+import { ExemptionsPage } from '@pages/exemptions-page';
+import { SettingsPage } from '@pages/settings-page';
+import { UserActionsPage } from '@pages/user-actions-page';
 
 export const routes: Routes = [
   {
     path: '',
     redirectTo: 'profile',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'profile',
@@ -25,23 +24,23 @@ export const routes: Routes = [
   },
   {
     path: 'students',
-    component: StudentsPage
+    component: StudentsPage,
   },
   {
     path: 'users',
-    component: UsersPage
+    component: UsersPage,
   },
   {
     path: 'settings',
-    component: SettingsPage
+    component: SettingsPage,
   },
   {
     path: 'user-actions',
-    component: UserActionsPage
+    component: UserActionsPage,
   },
   {
     path: 'events',
-    component: EventsPage
+    component: EventsPage,
   },
   {
     path: 'documents',
@@ -49,25 +48,24 @@ export const routes: Routes = [
     children: [
       {
         path: 'petitions',
-        component: PetitionsPage
+        component: PetitionsPage,
       },
       {
         path: 'reports',
-        component: ReportsPage
+        component: ReportsPage,
       },
       {
         path: 'exemptions',
-        component: ExemptionsPage
-      }
-    ]
+        component: ExemptionsPage,
+      },
+    ],
   },
   {
     path: 'statistic',
-    component: StatisticsPage
+    component: StatisticsPage,
   },
   {
     path: 'calendar',
-    component: CalendarPage
+    component: CalendarPage,
   },
-
 ];
