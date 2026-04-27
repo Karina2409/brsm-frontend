@@ -11,40 +11,56 @@ import { ReportsPage } from '@pages/reports-page';
 import { ExemptionsPage } from '@pages/exemptions-page';
 import { SettingsPage } from '@pages/settings-page';
 import { UserActionsPage } from '@pages/user-actions-page';
+import {Login} from '@pages/login-page';
+import {guestGuard} from '../shared/guards/guest-guard';
+import {authGuard} from '../shared/guards/auth-guard';
+import {roleGuard} from '../shared/guards/role-guard';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'profile',
+    redirectTo: 'login',
     pathMatch: 'full',
+  },
+  {
+    path: 'login',
+    component: Login,
+    canActivate: [guestGuard],
   },
   {
     path: 'profile',
     component: ProfilePage,
+    canActivate: [authGuard],
   },
   {
     path: 'students',
     component: StudentsPage,
+    canActivate: [roleGuard(['SECRETARY', 'CHIEF_SECRETARY'])]
   },
   {
     path: 'users',
     component: UsersPage,
+    canActivate: [roleGuard(['CHIEF_SECRETARY'])]
   },
   {
     path: 'settings',
     component: SettingsPage,
+    canActivate: [roleGuard(['CHIEF_SECRETARY'])]
   },
   {
     path: 'user-actions',
     component: UserActionsPage,
+    canActivate: [roleGuard(['CHIEF_SECRETARY'])]
   },
   {
     path: 'events',
     component: EventsPage,
+    canActivate: [roleGuard(['SECRETARY', 'CHIEF_SECRETARY'])]
   },
   {
     path: 'documents',
     component: DocumentsPage,
+    canActivate: [roleGuard(['SECRETARY', 'CHIEF_SECRETARY'])],
     children: [
       {
         path: 'petitions',
@@ -63,9 +79,11 @@ export const routes: Routes = [
   {
     path: 'statistic',
     component: StatisticsPage,
+    canActivate: [roleGuard(['SECRETARY', 'CHIEF_SECRETARY'])]
   },
   {
     path: 'calendar',
     component: CalendarPage,
+    canActivate: [roleGuard(['SECRETARY', 'CHIEF_SECRETARY'])]
   },
 ];

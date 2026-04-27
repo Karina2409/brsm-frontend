@@ -1,32 +1,27 @@
-<header class="header section">
-  <ul class="header__list">
-    <li class="header__item">
-      <a class="header__link" routerLink="/students">Студенты</a>
-    </li>
-    <li class="header__item header__item--dropdown">
-      <a class="header__link">Пользователи ▾</a>
-      <ul class="dropdown__menu">
-        <li><a class="header__link" routerLink="/users">Пользователи</a></li>
-        <li><a class="header__link" routerLink="/user-actions">Действия пользователей</a></li>
-      </ul>
-    </li>
-    <li class="header__item">
-      <a class="header__link" routerLink="/user-actions">Действия пользователей</a>
-    </li>
-    <li class="header__item">
-      <a class="header__link" routerLink="/events">Мероприятия</a>
-    </li>
-    <li class="header__item">
-      <a class="header__link" routerLink="/documents">Документы</a>
-    </li>
-    <li class="header__item">
-      <a class="header__link" routerLink="/statistic">Статистика</a>
-    </li>
-    <li class="header__item">
-      <a class="header__link" routerLink="/calendar">Календарь</a>
-    </li>
-  </ul>
-  <a class="header__link" routerLink="/profile" title="Профиль">
-    <ng-icon name="matAccountCircle" class="icon"></ng-icon>
-  </a>
+<header class="w-full flex justify-center" style="background: var(--p-primary-950)">
+  <div class="max-w-[1920px] w-full px-6 flex justify-between items-center h-14">
+    <ul class="flex gap-6 items-center text-white font-medium">
+      <li>
+        <a class="hover:text-blue-200 transition" routerLink="/students">Студенты</a>
+      </li>
+      <li>
+        <a class="hover:text-blue-200 transition" routerLink="/users">Пользователи</a>
+      </li>
+      <li>
+        <a class="hover:text-blue-200 transition" routerLink="/events">Мероприятия</a>
+      </li>
+      <li>
+        <a class="hover:text-blue-200 transition" routerLink="/documents">Документы</a>
+      </li>
+      <li>
+        <a class="hover:text-blue-200 transition" routerLink="/statistic">Статистика</a>
+      </li>
+      <li>
+        <a class="hover:text-blue-200 transition" routerLink="/calendar">Календарь</a>
+      </li>
+    </ul>
+    <a class="text-white hover:text-blue-200 transition text-3xl flex items-center" routerLink="/profile" title="Профиль">
+      <ng-icon name="matAccountCircle"></ng-icon>
+    </a>
+  </div>
 </header>
