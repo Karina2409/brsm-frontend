@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import { EventService } from '@services/event';
 import { Event } from '@interfaces/event';
 import { CardModule } from 'primeng/card';
+import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'app-all-events-page',
-    imports: [CardModule],
+    imports: [CardModule, RouterModule],
     templateUrl: './all-events-page.html',
     styleUrl: './all-events-page.scss',
 })

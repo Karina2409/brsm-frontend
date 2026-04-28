@@ -5,6 +5,7 @@ export interface Event {
     time: Date;
     place: string;
     studentCount: number;
+    studentsRegistered: number;
     optCount: number;
     forPetition: boolean;
 }

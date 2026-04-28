@@ -10,55 +10,76 @@
     <div>Нет мероприятий</div>
 }
 
-<div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+<div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
     @for (event of events; track event.eventId) {
-        <p-card class="h-full shadow-md transition hover:shadow-lg">
-            <ng-template pTemplate="title">
-                <div class="text-lg font-semibold">{{ event.name }}</div>
-            </ng-template>
+        <div
+            [routerLink]="['/events', event.eventId]"
+            class="group flex cursor-pointer flex-col rounded-xl border border-slate-200 bg-white p-5 transition-all hover:border-[var(--p-primary-300)] hover:shadow-lg active:scale-[0.98]"
+        >
+            <div class="mb-4 flex items-start justify-between gap-3">
+                <h3
+                    class="text-base leading-snug font-bold text-slate-800 transition-colors group-hover:text-[var(--p-primary-700)]"
+                >
+                    {{ event.name }}
+                </h3>
+                <span
+                    class="shrink-0 rounded-md bg-[var(--p-primary-50)] px-2 py-1 text-[11px] font-black tracking-tight text-[var(--p-primary-700)] ring-1 ring-[var(--p-primary-200)] ring-inset"
+                >
+                    {{ event.optCount }} ОПТ
+                </span>
+            </div>
 
-            <ng-template pTemplate="subtitle">
-                <div class="flex items-center gap-2 text-gray-600">
-                    <i class="pi pi-map-marker"></i>
-                    {{ event.place }}
+            <div class="grid grid-cols-1 gap-2 text-sm text-slate-600">
+                <div class="flex items-center gap-2">
+                    <i class="pi pi-map-marker w-4 text-[var(--p-primary-400)]"></i>
+                    <span class="truncate">{{ event.place }}</span>
                 </div>
-            </ng-template>
-
-            <div class="mt-2 flex flex-col gap-2 text-center">
-                <div class="flex items-center gap-2 text-sm">
-                    <i class="pi pi-calendar"></i>
-                    {{ formatDate(event.date) }}
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <i class="pi pi-calendar w-4 text-slate-400"></i>
+                        <span>{{ formatDate(event.date) }}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="pi pi-clock w-4 text-slate-400"></i>
+                        <span>{{ formatTime(event) }}</span>
+                    </div>
                 </div>
+            </div>
 
-                <div class="flex items-center gap-2 text-sm">
-                    <i class="pi pi-clock"></i>
-                    {{ formatTime(event) }}
+            <div class="my-4 border-t border-slate-100"></div>
+
+            <div class="space-y-2">
+                <div class="flex justify-between text-[11px] font-bold tracking-wider text-slate-500 uppercase">
+                    <span class="flex items-center gap-1"> <i class="pi pi-users text-[10px]"></i> Запись </span>
+                    <span class="text-slate-700">{{ 4 }} / {{ event.studentCount }}</span>
                 </div>
-
-                <div class="mt-2 flex items-center gap-4 text-sm text-gray-600">
-                    <span class="flex items-center gap-1">
-                        <i class="pi pi-users"></i>
-                        {{ formatStudents(event.studentCount) }}
-                    </span>
-
-                    <span class="flex items-center gap-1">
-                        <i class="pi pi-chart-line"></i>
-                        {{ event.optCount }} ОПТ
-                    </span>
+                <div class="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+                    <div
+                        class="h-full bg-[var(--p-primary-500)] shadow-[0_0_8px_rgba(var(--p-primary-500-rgb),0.4)] transition-all duration-500"
+                        [style.width.%]="(4 / event.studentCount) * 100"
+                    ></div>
                 </div>
+            </div>
 
+            <div class="my-4 border-t border-slate-100"></div>
+
+            <div class="flex items-center justify-between">
                 @if (event.forPetition) {
-                    <div class="mt-2 flex items-center gap-2 font-medium text-green-600">
-                        <i class="pi pi-file"></i>
-                        Для ходатайства
+                    <div class="flex items-center gap-2 text-xs font-bold text-green-600">
+                        <i class="pi pi-file-check text-base"></i>
+                        <span>ДЛЯ ХОДАТАЙСТВА</span>
                     </div>
                 } @else {
-                    <div class="mt-2 flex items-center gap-2 font-medium text-gray-400">
-                        <i class="pi pi-file"></i>
-                        Не для ходатайства
+                    <div class="flex items-center gap-2 text-xs font-medium text-slate-400">
+                        <i class="pi pi-file text-base"></i>
+                        <span>НЕ ДЛЯ ХОДАТАЙСТВА</span>
                     </div>
                 }
+
+                <i
+                    class="pi pi-chevron-right text-slate-300 transition-transform group-hover:translate-x-1 group-hover:text-[var(--p-primary-400)]"
+                ></i>
             </div>
-        </p-card>
+        </div>
     }
 </div>
