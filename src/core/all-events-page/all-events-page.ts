@@ -3,10 +3,11 @@ import { EventService } from '@services/event';
 import { Event } from '@interfaces/event';
 import { CardModule } from 'primeng/card';
 import { RouterModule } from '@angular/router';
+import {SkeletonModule} from 'primeng/skeleton';
 
 @Component({
     selector: 'app-all-events-page',
-    imports: [CardModule, RouterModule],
+    imports: [CardModule, RouterModule, SkeletonModule],
     templateUrl: './all-events-page.html',
     styleUrl: './all-events-page.scss',
 })
