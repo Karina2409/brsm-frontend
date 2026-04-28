@@ -1,27 +1,17 @@
-<header class="w-full flex justify-center" style="background: var(--p-primary-950)">
-  <div class="max-w-[1920px] w-full px-6 flex justify-between items-center h-14">
-    <ul class="flex gap-6 items-center text-white font-medium">
-      <li>
-        <a class="hover:text-blue-200 transition" routerLink="/students">Студенты</a>
-      </li>
-      <li>
-        <a class="hover:text-blue-200 transition" routerLink="/users">Пользователи</a>
-      </li>
-      <li>
-        <a class="hover:text-blue-200 transition" routerLink="/events">Мероприятия</a>
-      </li>
-      <li>
-        <a class="hover:text-blue-200 transition" routerLink="/documents">Документы</a>
-      </li>
-      <li>
-        <a class="hover:text-blue-200 transition" routerLink="/statistic">Статистика</a>
-      </li>
-      <li>
-        <a class="hover:text-blue-200 transition" routerLink="/calendar">Календарь</a>
-      </li>
-    </ul>
-    <a class="text-white hover:text-blue-200 transition text-3xl flex items-center" routerLink="/profile" title="Профиль">
-      <ng-icon name="matAccountCircle"></ng-icon>
-    </a>
-  </div>
-</header>
+<div class="header-wrapper">
+  <p-menubar [model]="items">
+
+    <ng-template pTemplate="end">
+      <p-tieredMenu #menu [model]="profileItems" [popup]="true"></p-tieredMenu>
+
+      <button
+        class="profile-icon"
+        (click)="menu.toggle($event)"
+        type="button"
+      >
+        <ng-icon name="matAccountCircle"></ng-icon>
+      </button>
+    </ng-template>
+
+  </p-menubar>
+</div>

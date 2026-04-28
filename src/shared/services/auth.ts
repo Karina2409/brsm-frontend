@@ -14,18 +14,6 @@ export class AuthService {
 
   private API = 'http://localhost:8080/brsm/auth';
 
-  private getUser() {
-    return JSON.parse(localStorage.getItem('user') || 'null');
-  }
-
-  private saveUser(user: AuthResponse) {
-    localStorage.setItem('user', JSON.stringify(user));
-  }
-
-  private clearUser() {
-    localStorage.removeItem('user');
-  }
-
   login(login: string, password: string) {
     return this.http.post<AuthResponse>(`${this.API}/login`, { login, password }).pipe(
       tap((data) => this.saveUser(data))
@@ -55,11 +43,6 @@ export class AuthService {
     }
   }
 
-  private finishLogout() {
-    this.clearUser();
-    this.router.navigate(['/login']);
-  }
-
   getAccessToken(): string | null {
     return this.getUser()?.token || null;
   }
@@ -70,5 +53,27 @@ export class AuthService {
       user.token = token;
       this.saveUser(user);
     }
+  }
+
+  isAuthenticated(): boolean {
+    const user = this.getUser();
+    return !!(user?.token && user?.refreshToken);
+  }
+
+  getUser() {
+    return JSON.parse(localStorage.getItem('user') || 'null');
+  }
+
+  private saveUser(user: AuthResponse) {
+    localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  private clearUser() {
+    localStorage.removeItem('user');
+  }
+
+  private finishLogout() {
+    this.clearUser();
+    this.router.navigate(['/login']);
   }
 }

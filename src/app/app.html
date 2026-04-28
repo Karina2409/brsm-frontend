@@ -1,4 +1,6 @@
-<app-header></app-header>
+@if (authService.isAuthenticated()) {
+  <app-header></app-header>
+}
 
 <div class="page-container">
   <router-outlet></router-outlet>
