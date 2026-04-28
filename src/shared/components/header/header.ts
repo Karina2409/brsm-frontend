@@ -21,16 +21,17 @@ export class Header implements OnInit {
 
     ngOnInit() {
         this.items = [
-            ...(this.authService.isStudent() ? [{ label: 'Главная', routerLink: '/main', icon: 'pi pi-home' }] : []),
-
-            ...(this.authService.isSecretary() || this.authService.isChiefSecretary()
-                ? [{ label: 'Студенты', routerLink: '/students', icon: 'pi pi-graduation-cap' }]
+            ...(this.authService.isStudent()
+                ? [
+                      { label: 'Главная', routerLink: '/main', icon: 'pi pi-home' },
+                      { label: 'Мероприятия', routerLink: '/events', icon: 'pi pi-calendar-clock' },
+                  ]
                 : []),
-
-            { label: 'Мероприятия', routerLink: '/events', icon: 'pi pi-calendar-clock' },
 
             ...(this.authService.isSecretary() || this.authService.isChiefSecretary()
                 ? [
+                      { label: 'Студенты', routerLink: '/students', icon: 'pi pi-graduation-cap' },
+                      { label: 'Мероприятия', routerLink: '/all-events', icon: 'pi pi-calendar-clock' },
                       { label: 'Документы', routerLink: '/documents', icon: 'pi pi-file' },
                       { label: 'Статистика', routerLink: '/statistic', icon: 'pi pi-chart-bar' },
                   ]

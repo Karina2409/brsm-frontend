@@ -1,0 +1,64 @@
+<h2>Мероприятия</h2>
+
+@if (loading) {
+    <div>Загрузка...</div>
+}
+@if (error) {
+    <div class="error">{{ error }}</div>
+}
+@if (!loading && events.length === 0) {
+    <div>Нет мероприятий</div>
+}
+
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+    @for (event of events; track event.eventId) {
+        <p-card class="h-full shadow-md transition hover:shadow-lg">
+            <ng-template pTemplate="title">
+                <div class="text-lg font-semibold">{{ event.name }}</div>
+            </ng-template>
+
+            <ng-template pTemplate="subtitle">
+                <div class="flex items-center gap-2 text-gray-600">
+                    <i class="pi pi-map-marker"></i>
+                    {{ event.place }}
+                </div>
+            </ng-template>
+
+            <div class="mt-2 flex flex-col gap-2 text-center">
+                <div class="flex items-center gap-2 text-sm">
+                    <i class="pi pi-calendar"></i>
+                    {{ formatDate(event.date) }}
+                </div>
+
+                <div class="flex items-center gap-2 text-sm">
+                    <i class="pi pi-clock"></i>
+                    {{ formatTime(event) }}
+                </div>
+
+                <div class="mt-2 flex items-center gap-4 text-sm text-gray-600">
+                    <span class="flex items-center gap-1">
+                        <i class="pi pi-users"></i>
+                        {{ formatStudents(event.studentCount) }}
+                    </span>
+
+                    <span class="flex items-center gap-1">
+                        <i class="pi pi-chart-line"></i>
+                        {{ event.optCount }} ОПТ
+                    </span>
+                </div>
+
+                @if (event.forPetition) {
+                    <div class="mt-2 flex items-center gap-2 font-medium text-green-600">
+                        <i class="pi pi-file"></i>
+                        Для ходатайства
+                    </div>
+                } @else {
+                    <div class="mt-2 flex items-center gap-2 font-medium text-gray-400">
+                        <i class="pi pi-file"></i>
+                        Не для ходатайства
+                    </div>
+                }
+            </div>
+        </p-card>
+    }
+</div>

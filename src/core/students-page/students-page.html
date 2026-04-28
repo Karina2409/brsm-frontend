@@ -6,12 +6,12 @@
         [(ngModel)]="filters.faculties"
         placeholder="Факультет"
         optionLabel="name"
-        class="w-full md:w-80 filter"
+        class="w-full filter md:w-80"
         (onChange)="onFacultyChange()"
     />
 </div>
 <div class="section students-list">
     @for (student of students; track student.id) {
-    <app-student-card [studentInfo]="student"></app-student-card>
+        <app-student-card [studentInfo]="student"></app-student-card>
     }
 </div>

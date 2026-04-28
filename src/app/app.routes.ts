@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { ProfilePage } from '@pages/profile-page';
 import { StudentsPage } from '@pages/students-page';
 import { UsersPage } from '@pages/users-page';
-import { EventsPage } from '@pages/events-page';
+import { AllEventsPage } from '@pages/all-events-page';
 import { DocumentsPage } from '@pages/documents-page';
 import { StatisticsPage } from '@pages/statistics-page';
 import { CalendarPage } from '@pages/calendar-page';
@@ -19,6 +19,7 @@ import { roleGuard } from '../shared/guards/role-guard';
 import { Role } from '@enums/role';
 import { MyEventsPage } from '@pages/my-events-page';
 import { MySettingsPage } from '@pages/my-settings-page';
+import { EventsPage } from '@pages/events-page';
 
 export const routes: Routes = [
     {
@@ -57,9 +58,9 @@ export const routes: Routes = [
         canActivate: [roleGuard([Role.CHIEF_SECRETARY])],
     },
     {
-        path: 'events',
-        component: EventsPage,
-        canActivate: [authGuard],
+        path: 'all-events',
+        component: AllEventsPage,
+        canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
     },
     {
         path: 'documents',
@@ -93,6 +94,11 @@ export const routes: Routes = [
     {
         path: 'main',
         component: MainPage,
+        canActivate: [roleGuard([Role.STUDENT])],
+    },
+    {
+        path: 'events',
+        component: EventsPage,
         canActivate: [roleGuard([Role.STUDENT])],
     },
     {
