@@ -9,47 +9,47 @@ import { AllStudents } from '@interfaces/all-students';
 import { StudentCard } from '@components/student-card/student-card';
 
 @Component({
-  selector: 'app-students-page',
-  imports: [Search, MultiSelectModule, FormsModule, StudentCard],
-  templateUrl: './students-page.html',
-  styleUrl: './students-page.scss',
+    selector: 'app-students-page',
+    imports: [Search, MultiSelectModule, FormsModule, StudentCard],
+    templateUrl: './students-page.html',
+    styleUrl: './students-page.scss',
 })
 export class StudentsPage {
-  public students: AllStudents[];
+    public students: AllStudents[];
 
-  private readonly studentsService = inject(Students);
+    private readonly studentsService = inject(Students);
 
-  public faculties: Faculty[] = [
-    { name: 'ФКП', code: 'FKP' },
-    { name: 'ФИТУ', code: 'FITU' },
-    { name: 'ФРЭ', code: 'FRE' },
-    { name: 'ФКСиС', code: 'FKSIS' },
-    { name: 'ФИБ', code: 'FIB' },
-    { name: 'ИЭФ', code: 'IEF' },
-    { name: 'ВФ', code: 'VF' },
-  ];
+    public faculties: Faculty[] = [
+        { name: 'ФКП', code: 'FKP' },
+        { name: 'ФИТУ', code: 'FITU' },
+        { name: 'ФРЭ', code: 'FRE' },
+        { name: 'ФКСиС', code: 'FKSIS' },
+        { name: 'ФИБ', code: 'FIB' },
+        { name: 'ИЭФ', code: 'IEF' },
+        { name: 'ВФ', code: 'VF' },
+    ];
 
-  public filters: StudentSearchParams = {
-    surname: '',
-    faculties: [],
-  };
+    public filters: StudentSearchParams = {
+        surname: '',
+        faculties: [],
+    };
 
-  constructor() {
-    this.students = this.studentsService.findStudentsInfo();
-  }
+    constructor() {
+        this.students = this.studentsService.findStudentsInfo();
+    }
 
-  public onSearch(surname: string) {
-    this.filters.surname = surname;
-    this.performSearch();
-  }
+    public onSearch(surname: string) {
+        this.filters.surname = surname;
+        this.performSearch();
+    }
 
-  public onFacultyChange() {
-    this.performSearch();
-  }
+    public onFacultyChange() {
+        this.performSearch();
+    }
 
-  public performSearch() {
-    console.log('Поиск с параметрами:', this.filters);
-    //TODO (сервер): после добавления сервера добавить обращение к сервису
-    // this.studentService.search(this.filters).subscribe(...)
-  }
+    public performSearch() {
+        console.log('Поиск с параметрами:', this.filters);
+        //TODO (сервер): после добавления сервера добавить обращение к сервису
+        // this.studentService.search(this.filters).subscribe(...)
+    }
 }

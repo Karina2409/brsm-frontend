@@ -1,4 +1,4 @@
 export interface RefreshResponse {
-  token: string;
-  refreshToken: string;
+    token: string;
+    refreshToken: string;
 }

@@ -1,28 +1,28 @@
 :host {
-  width: 100%;
-
-  .p-menubar {
-    max-width: 1920px;
     width: 100%;
-  }
+
+    .p-menubar {
+        max-width: 1920px;
+        width: 100%;
+    }
 }
 
 .header-wrapper {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  background: var(--p-primary-950);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background: var(--p-primary-950);
 }
 
 .profile-icon {
-  color: white;
-  font-size: 28px;
-  display: flex;
-  align-items: center;
-  transition: 0.3s;
-  cursor: pointer;
+    color: white;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    transition: 0.3s;
+    cursor: pointer;
 }
 
 .profile-icon:hover {
-  color: var(--p-primary-100);
+    color: var(--p-primary-100);
 }

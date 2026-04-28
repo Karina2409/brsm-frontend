@@ -1,17 +1,11 @@
 <div class="header-wrapper">
-  <p-menubar [model]="items">
+    <p-menubar [model]="items">
+        <ng-template pTemplate="end">
+            <p-tieredMenu #menu [model]="profileItems" [popup]="true"></p-tieredMenu>
 
-    <ng-template pTemplate="end">
-      <p-tieredMenu #menu [model]="profileItems" [popup]="true"></p-tieredMenu>
-
-      <button
-        class="profile-icon"
-        (click)="menu.toggle($event)"
-        type="button"
-      >
-        <ng-icon name="matAccountCircle"></ng-icon>
-      </button>
-    </ng-template>
-
-  </p-menubar>
+            <button class="profile-icon" (click)="menu.toggle($event)" type="button">
+                <ng-icon name="matAccountCircle"></ng-icon>
+            </button>
+        </ng-template>
+    </p-menubar>
 </div>

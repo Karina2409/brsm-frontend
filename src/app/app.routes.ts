@@ -17,92 +17,92 @@ import { guestGuard } from '../shared/guards/guest-guard';
 import { authGuard } from '../shared/guards/auth-guard';
 import { roleGuard } from '../shared/guards/role-guard';
 import { Role } from '@enums/role';
-import {MyEventsPage} from '@pages/my-events-page';
-import {MySettingsPage} from '@pages/my-settings-page';
+import { MyEventsPage } from '@pages/my-events-page';
+import { MySettingsPage } from '@pages/my-settings-page';
 
 export const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full',
-  },
-  {
-    path: 'login',
-    component: Login,
-    canActivate: [guestGuard],
-  },
-  {
-    path: 'profile',
-    component: ProfilePage,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'students',
-    component: StudentsPage,
-    canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])]
-  },
-  {
-    path: 'users',
-    component: UsersPage,
-    canActivate: [roleGuard([Role.CHIEF_SECRETARY])]
-  },
-  {
-    path: 'settings',
-    component: SettingsPage,
-    canActivate: [roleGuard([Role.CHIEF_SECRETARY])]
-  },
-  {
-    path: 'user-actions',
-    component: UserActionsPage,
-    canActivate: [roleGuard([Role.CHIEF_SECRETARY])]
-  },
-  {
-    path: 'events',
-    component: EventsPage,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'documents',
-    component: DocumentsPage,
-    canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
-    children: [
-      {
-        path: 'petitions',
-        component: PetitionsPage,
-      },
-      {
-        path: 'reports',
-        component: ReportsPage,
-      },
-      {
-        path: 'exemptions',
-        component: ExemptionsPage,
-      },
-    ],
-  },
-  {
-    path: 'statistic',
-    component: StatisticsPage,
-    canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])]
-  },
-  {
-    path: 'calendar',
-    component: CalendarPage,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'main',
-    component: MainPage,
-    canActivate: [roleGuard([Role.STUDENT])]
-  },
-  {
-    path: 'my-events',
-    component: MyEventsPage,
-    canActivate: [roleGuard([Role.STUDENT])]
-  },
-  {
-    path: 'my-settings',
-    component: MySettingsPage,
-    canActivate: [authGuard]
-  },
+    {
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full',
+    },
+    {
+        path: 'login',
+        component: Login,
+        canActivate: [guestGuard],
+    },
+    {
+        path: 'profile',
+        component: ProfilePage,
+        canActivate: [authGuard],
+    },
+    {
+        path: 'students',
+        component: StudentsPage,
+        canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
+    },
+    {
+        path: 'users',
+        component: UsersPage,
+        canActivate: [roleGuard([Role.CHIEF_SECRETARY])],
+    },
+    {
+        path: 'settings',
+        component: SettingsPage,
+        canActivate: [roleGuard([Role.CHIEF_SECRETARY])],
+    },
+    {
+        path: 'user-actions',
+        component: UserActionsPage,
+        canActivate: [roleGuard([Role.CHIEF_SECRETARY])],
+    },
+    {
+        path: 'events',
+        component: EventsPage,
+        canActivate: [authGuard],
+    },
+    {
+        path: 'documents',
+        component: DocumentsPage,
+        canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
+        children: [
+            {
+                path: 'petitions',
+                component: PetitionsPage,
+            },
+            {
+                path: 'reports',
+                component: ReportsPage,
+            },
+            {
+                path: 'exemptions',
+                component: ExemptionsPage,
+            },
+        ],
+    },
+    {
+        path: 'statistic',
+        component: StatisticsPage,
+        canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
+    },
+    {
+        path: 'calendar',
+        component: CalendarPage,
+        canActivate: [authGuard],
+    },
+    {
+        path: 'main',
+        component: MainPage,
+        canActivate: [roleGuard([Role.STUDENT])],
+    },
+    {
+        path: 'my-events',
+        component: MyEventsPage,
+        canActivate: [roleGuard([Role.STUDENT])],
+    },
+    {
+        path: 'my-settings',
+        component: MySettingsPage,
+        canActivate: [authGuard],
+    },
 ];

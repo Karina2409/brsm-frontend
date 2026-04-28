@@ -1,4 +1,4 @@
 export type StudentSearchParams = {
-  surname?: string;
-  faculties?: string[];
+    surname?: string;
+    faculties?: string[];
 };

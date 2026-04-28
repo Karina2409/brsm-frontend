@@ -1,15 +1,14 @@
 :host {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .page-container {
-  max-width: 1920px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 1.2rem;
+    max-width: 1920px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1.2rem;
 }
-
