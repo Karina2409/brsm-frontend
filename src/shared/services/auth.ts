@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 import {AuthResponse} from '@interfaces/auth-response';
 import {RefreshResponse} from '@interfaces/refresh-response';
+import {Role} from '@enums/role';
 
 @Injectable({
   providedIn: 'root',
@@ -58,6 +59,21 @@ export class AuthService {
   isAuthenticated(): boolean {
     const user = this.getUser();
     return !!(user?.token && user?.refreshToken);
+  }
+
+  isSecretary(): boolean {
+    const role = this.getUser()?.role;
+    return role === Role.SECRETARY;
+  }
+
+  isStudent(): boolean {
+    const role = this.getUser()?.role;
+    return role === Role.STUDENT;
+  }
+
+  isChiefSecretary(): boolean {
+    const role = this.getUser()?.role;
+    return role === Role.CHIEF_SECRETARY;
   }
 
   getUser() {

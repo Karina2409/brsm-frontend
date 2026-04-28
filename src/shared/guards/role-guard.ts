@@ -19,7 +19,7 @@ export const roleGuard= (roles: string[]): CanActivateFn  => {
     }
 
     if (user.role === 'STUDENT') {
-      router.navigate(['/profile']);
+      router.navigate(['/main']);
     } else if (user.role === 'SECRETARY' || user.role === 'CHIEF_SECRETARY') {
       router.navigate(['/students']);
     }
