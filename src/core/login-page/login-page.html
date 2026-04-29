@@ -4,18 +4,16 @@
 
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
             <input
-                type="login"
+                type="text"
                 formControlName="login"
                 placeholder="Логин"
-                class="rounded-lg border px-4 py-3 focus:ring-2 focus:ring-blue-600 focus:outline-none"
-            />
+                class="rounded-lg border px-4 py-3 focus:ring-2 focus:ring-blue-600 focus:outline-none" />
 
             <input
                 type="password"
                 formControlName="password"
                 placeholder="Пароль"
-                class="rounded-lg border px-4 py-3 focus:ring-2 focus:ring-blue-600 focus:outline-none"
-            />
+                class="rounded-lg border px-4 py-3 focus:ring-2 focus:ring-blue-600 focus:outline-none" />
 
             <button type="submit" class="rounded-lg bg-blue-900 py-3 text-white transition hover:bg-blue-800">
                 Войти

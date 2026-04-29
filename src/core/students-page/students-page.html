@@ -1,14 +1,13 @@
 <div class="options-container section">
     <app-search placeholder="Введите фамилию" (searchEvent)="onSearch($event)"></app-search>
 
-    <p-multiselect
+    <p-multiSelect
         [options]="faculties"
         [(ngModel)]="filters.faculties"
         placeholder="Факультет"
         optionLabel="name"
         class="w-full filter md:w-80"
-        (onChange)="onFacultyChange()"
-    />
+        (onChange)="onFacultyChange()" />
 </div>
 <div class="section students-list">
     @for (student of students; track student.id) {

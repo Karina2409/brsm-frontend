@@ -1,8 +1,7 @@
 <div
     [class.without__photo-container]="!studentInfo()?.photo"
     [class.student__photo-container]="studentInfo()?.photo"
-    class=""
->
+    class="">
     @if (!studentInfo()?.photo) {
         <img src="assets/photo.png" alt="БРСМ БГУИР" class="photo" />
     }

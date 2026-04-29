@@ -1,8 +1,125 @@
-<h2>Мероприятия</h2>
+<div class="mb-8 flex flex-col gap-6">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex items-center gap-3">
+            <div class="h-8 w-1.5 rounded-full bg-[var(--p-primary-500)]"></div>
+            <h2 class="text-2xl font-black tracking-tighter text-slate-800 uppercase md:text-3xl">Мероприятия</h2>
+            <span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-slate-500">
+                {{ filteredEvents.length }}
+            </span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+            <p-iconfield class="w-full sm:w-64">
+                <p-inputicon class="pi pi-search" />
+                <input
+                    type="text"
+                    pInputText
+                    [(ngModel)]="filterState.search"
+                    (input)="applyFilters()"
+                    placeholder="Поиск по названию..."
+                    class="p-inputtext-sm w-full border-none bg-slate-100 focus:ring-2" />
+            </p-iconfield>
+            <p-button
+                [icon]="showFilters ? 'pi pi-filter-slash' : 'pi pi-filter'"
+                [label]="showFilters ? 'Скрыть' : 'Фильтры'"
+                [outlined]="!showFilters"
+                size="small"
+                (onClick)="showFilters = !showFilters" />
+        </div>
+    </div>
+
+    @if (showFilters) {
+        <div
+            class="grid grid-cols-1 gap-8 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-all lg:grid-cols-3 xl:grid-cols-4">
+            <div class="space-y-4">
+                <div class="flex flex-col gap-2">
+                    <label class="text-[10px] font-black tracking-widest text-slate-400 uppercase">
+                        Временной статус
+                    </label>
+                    <p-selectButton
+                        [options]="timeOptions"
+                        [(ngModel)]="filterState.timeStatus"
+                        (onChange)="applyFilters()"
+                        class="p-selectbutton-sm" />
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label class="text-[10px] font-black tracking-widest text-slate-400 uppercase">
+                        Точный диапазон дат
+                    </label>
+                    <p-date-picker
+                        [(ngModel)]="filterState.dateRange"
+                        selectionMode="range"
+                        [showIcon]="true"
+                        (onSelect)="applyFilters()"
+                        (onClear)="applyFilters()"
+                        placeholder="Выберите даты"
+                        class="w-full"
+                        inputStyleClass="p-inputtext-sm bg-slate-50 border-slate-200" />
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <label class="text-[10px] font-black tracking-widest text-slate-400 uppercase">Ходатайство</label>
+                <p-selectButton
+                    [options]="petitionOptions"
+                    [(ngModel)]="filterState.petition"
+                    (onChange)="applyFilters()" />
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                    <label class="text-[10px] font-black tracking-widest text-slate-400 uppercase">Диапазон ОПТ</label>
+                    <span class="text-xs font-bold text-[var(--p-primary-600)]">
+                        {{ filterState.optRange[0] }} - {{ filterState.optRange[1] }}
+                    </span>
+                </div>
+                <div class="px-2 pt-2">
+                    <p-slider
+                        [(ngModel)]="filterState.optRange"
+                        [range]="true"
+                        [min]="0"
+                        [max]="20"
+                        (onChange)="applyFilters()"
+                        class="w-full" />
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                    <label class="text-[10px] font-black tracking-widest text-slate-400 uppercase">
+                        Количество мест
+                    </label>
+                    <span class="text-xs font-bold text-[var(--p-primary-600)]">
+                        {{ filterState.studentRange[0] }} - {{ filterState.studentRange[1] }}
+                    </span>
+                </div>
+                <div class="px-2 pt-2">
+                    <p-slider
+                        [(ngModel)]="filterState.studentRange"
+                        [range]="true"
+                        [min]="0"
+                        [max]="200"
+                        (onChange)="applyFilters()"
+                        class="w-full" />
+                </div>
+            </div>
+
+            <div class="flex justify-end border-t border-slate-50 pt-4 lg:col-span-3 xl:col-span-4">
+                <p-button
+                    label="Сбросить все фильтры"
+                    icon="pi pi-refresh"
+                    [text]="true"
+                    severity="secondary"
+                    size="small"
+                    (onClick)="resetFilters()" />
+            </div>
+        </div>
+    }
+</div>
 
 @if (loading) {
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-        @for (i of [1,2,3,4,5,6]; track $index) {
+        @for (_ of [1, 2, 3, 4, 5, 6]; track $index) {
             <div class="flex flex-col rounded-xl border border-slate-100 bg-white p-5 shadow-sm">
                 <div class="mb-4 flex items-start justify-between">
                     <p-skeleton width="60%" height="1.5rem" />
@@ -27,25 +144,22 @@
 @if (error) {
     <div class="error">{{ error }}</div>
 }
-@if (!loading && events.length === 0) {
+@if (!loading && filteredEvents.length === 0) {
     <div>Нет мероприятий</div>
 }
 
 <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-    @for (event of events; track event.eventId) {
+    @for (event of filteredEvents; track event.eventId) {
         <div
             [routerLink]="['/events', event.eventId]"
-            class="group flex cursor-pointer flex-col rounded-xl border border-slate-200 bg-white p-5 transition-all hover:border-[var(--p-primary-300)] hover:shadow-lg active:scale-[0.98]"
-        >
+            class="group flex cursor-pointer flex-col rounded-xl border border-slate-200 bg-white p-5 transition-all hover:border-[var(--p-primary-300)] hover:shadow-lg active:scale-[0.98]">
             <div class="mb-4 flex items-start justify-between gap-3">
                 <h3
-                    class="text-base leading-snug font-bold text-slate-800 transition-colors group-hover:text-[var(--p-primary-700)]"
-                >
+                    class="text-base leading-snug font-bold text-slate-800 transition-colors group-hover:text-[var(--p-primary-700)]">
                     {{ event.name }}
                 </h3>
                 <span
-                    class="shrink-0 rounded-md bg-[var(--p-primary-50)] px-2 py-1 text-[11px] font-black tracking-tight text-[var(--p-primary-700)] ring-1 ring-[var(--p-primary-200)] ring-inset"
-                >
+                    class="shrink-0 rounded-md bg-[var(--p-primary-50)] px-2 py-1 text-[11px] font-black tracking-tight text-[var(--p-primary-700)] ring-1 ring-[var(--p-primary-200)] ring-inset">
                     {{ event.optCount }} ОПТ
                 </span>
             </div>
@@ -77,8 +191,7 @@
                 <div class="h-2 w-full overflow-hidden rounded-full bg-slate-100">
                     <div
                         class="h-full bg-[var(--p-primary-500)] shadow-[0_0_8px_rgba(var(--p-primary-500-rgb),0.4)] transition-all duration-500"
-                        [style.width.%]="(4 / event.studentCount) * 100"
-                    ></div>
+                        [style.width.%]="(4 / event.studentCount) * 100"></div>
                 </div>
             </div>
 
@@ -98,8 +211,7 @@
                 }
 
                 <i
-                    class="pi pi-chevron-right text-slate-300 transition-transform group-hover:translate-x-1 group-hover:text-[var(--p-primary-400)]"
-                ></i>
+                    class="pi pi-chevron-right text-slate-300 transition-transform group-hover:translate-x-1 group-hover:text-[var(--p-primary-400)]"></i>
             </div>
         </div>
     }
