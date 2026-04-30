@@ -32,6 +32,9 @@
             "@enums/*": ["src/shared/enums/*"],
             "@interfaces/*": ["src/shared/interfaces/*"],
             "@validators/*": ["src/shared/validators/*"],
+            "@utils/*": ["src/shared/utils/*"],
+            "@pipes/*": ["src/shared/pipes/*"],
+            "@guards/*": ["src/shared/guards/*"],
             "@environments/*": ["src/environments/*"]
         }
     },

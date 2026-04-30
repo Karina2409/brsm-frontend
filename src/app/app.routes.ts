@@ -13,13 +13,16 @@ import { SettingsPage } from '@pages/settings-page';
 import { UserActionsPage } from '@pages/user-actions-page';
 import { MainPage } from '@pages/main-page';
 import { Login } from '@pages/login-page';
-import { guestGuard } from '../shared/guards/guest-guard';
-import { authGuard } from '../shared/guards/auth-guard';
-import { roleGuard } from '../shared/guards/role-guard';
 import { Role } from '@enums/role';
 import { MyEventsPage } from '@pages/my-events-page';
 import { MySettingsPage } from '@pages/my-settings-page';
 import { EventsPage } from '@pages/events-page';
+import { CreateEventPage } from '@pages/create-event-page';
+import { EventDetailPage } from '@pages/event-detail-page';
+import { guestGuard } from '@guards/guest-guard';
+import { authGuard } from '@guards/auth-guard';
+import { roleGuard } from '@guards/role-guard';
+import { eventsRedirectGuard } from '@guards/events-redirect-guard';
 
 export const routes: Routes = [
     {
@@ -58,9 +61,30 @@ export const routes: Routes = [
         canActivate: [roleGuard([Role.CHIEF_SECRETARY])],
     },
     {
-        path: 'all-events',
-        component: AllEventsPage,
-        canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
+        path: 'events',
+        canActivate: [authGuard],
+        children: [
+            {
+                path: '',
+                component: EventsPage,
+                canActivate: [eventsRedirectGuard, roleGuard([Role.STUDENT])],
+            },
+            {
+                path: 'all',
+                component: AllEventsPage,
+                canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
+            },
+            {
+                path: 'create',
+                component: CreateEventPage,
+                canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
+            },
+            {
+                path: ':id',
+                component: EventDetailPage,
+                canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
+            },
+        ],
     },
     {
         path: 'documents',

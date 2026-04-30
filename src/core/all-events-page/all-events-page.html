@@ -25,6 +25,13 @@
                 [outlined]="!showFilters"
                 size="small"
                 (onClick)="showFilters = !showFilters" />
+            <p-button
+                label="Создать"
+                icon="pi pi-plus"
+                size="small"
+                severity="primary"
+                class="order-first w-full sm:order-none sm:w-auto"
+                [routerLink]="['/events/create']" />
         </div>
     </div>
 
@@ -141,78 +148,43 @@
         }
     </div>
 }
+
+@if (!loading && allEvents.length === 0) {
+    <div
+        class="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 bg-white px-6 py-24 shadow-sm">
+        <div class="relative mb-6">
+            <i class="pi pi-calendar-plus text-6xl text-slate-100"></i>
+            <i class="pi pi-sparkles absolute -top-2 -right-2 text-xl text-[var(--p-primary-400)]"></i>
+        </div>
+        <h3 class="text-xl font-black tracking-tight text-slate-800">Мероприятий пока нет</h3>
+        <p class="mt-2 mb-8 max-w-[350px] text-center text-slate-500">
+            Похоже, в системе еще не создано ни одного мероприятия. Начните с создания первого мероприятия для
+            студентов.
+        </p>
+        <p-button
+            label="Создать первое мероприятие"
+            icon="pi pi-plus"
+            severity="primary"
+            class="shadow-[var(--p-primary-100)] shadow-lg"
+            [routerLink]="['/events/create']" />
+    </div>
+
+} @else if (!loading && filteredEvents.length === 0) {
+    <div class="col-span-full py-12 text-center">
+        <i class="pi pi-inbox mb-3 text-4xl text-slate-200"></i>
+        <div class="font-medium tracking-wide text-slate-400">Список пуст</div>
+        <button (click)="resetFilters()" class="mt-2 text-sm font-bold text-[var(--p-primary-500)] hover:underline">
+            Показать все мероприятия
+        </button>
+    </div>
+}
+
 @if (error) {
     <div class="error">{{ error }}</div>
-}
-@if (!loading && filteredEvents.length === 0) {
-    <div>Нет мероприятий</div>
 }
 
 <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
     @for (event of filteredEvents; track event.eventId) {
-        <div
-            [routerLink]="['/events', event.eventId]"
-            class="group flex cursor-pointer flex-col rounded-xl border border-slate-200 bg-white p-5 transition-all hover:border-[var(--p-primary-300)] hover:shadow-lg active:scale-[0.98]">
-            <div class="mb-4 flex items-start justify-between gap-3">
-                <h3
-                    class="text-base leading-snug font-bold text-slate-800 transition-colors group-hover:text-[var(--p-primary-700)]">
-                    {{ event.name }}
-                </h3>
-                <span
-                    class="shrink-0 rounded-md bg-[var(--p-primary-50)] px-2 py-1 text-[11px] font-black tracking-tight text-[var(--p-primary-700)] ring-1 ring-[var(--p-primary-200)] ring-inset">
-                    {{ event.optCount }} ОПТ
-                </span>
-            </div>
-
-            <div class="grid grid-cols-1 gap-2 text-sm text-slate-600">
-                <div class="flex items-center gap-2">
-                    <i class="pi pi-map-marker w-4 text-[var(--p-primary-400)]"></i>
-                    <span class="truncate">{{ event.place }}</span>
-                </div>
-                <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-2">
-                        <i class="pi pi-calendar w-4 text-slate-400"></i>
-                        <span>{{ formatDate(event.date) }}</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <i class="pi pi-clock w-4 text-slate-400"></i>
-                        <span>{{ formatTime(event) }}</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="my-4 border-t border-slate-100"></div>
-
-            <div class="space-y-2">
-                <div class="flex justify-between text-[11px] font-bold tracking-wider text-slate-500 uppercase">
-                    <span class="flex items-center gap-1"> <i class="pi pi-users text-[10px]"></i> Запись </span>
-                    <span class="text-slate-700">{{ 4 }} / {{ event.studentCount }}</span>
-                </div>
-                <div class="h-2 w-full overflow-hidden rounded-full bg-slate-100">
-                    <div
-                        class="h-full bg-[var(--p-primary-500)] shadow-[0_0_8px_rgba(var(--p-primary-500-rgb),0.4)] transition-all duration-500"
-                        [style.width.%]="(4 / event.studentCount) * 100"></div>
-                </div>
-            </div>
-
-            <div class="my-4 border-t border-slate-100"></div>
-
-            <div class="flex items-center justify-between">
-                @if (event.forPetition) {
-                    <div class="flex items-center gap-2 text-xs font-bold text-green-600">
-                        <i class="pi pi-file-check text-base"></i>
-                        <span>ДЛЯ ХОДАТАЙСТВА</span>
-                    </div>
-                } @else {
-                    <div class="flex items-center gap-2 text-xs font-medium text-slate-400">
-                        <i class="pi pi-file text-base"></i>
-                        <span>НЕ ДЛЯ ХОДАТАЙСТВА</span>
-                    </div>
-                }
-
-                <i
-                    class="pi pi-chevron-right text-slate-300 transition-transform group-hover:translate-x-1 group-hover:text-[var(--p-primary-400)]"></i>
-            </div>
-        </div>
+        <app-event-card-admin [event]="event"></app-event-card-admin>
     }
 </div>

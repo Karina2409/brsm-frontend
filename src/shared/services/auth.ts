@@ -78,7 +78,7 @@ export class AuthService {
         return role === Role.CHIEF_SECRETARY;
     }
 
-    getUser() {
+    getUser(): AuthResponse {
         return JSON.parse(localStorage.getItem('user') || 'null');
     }
 
