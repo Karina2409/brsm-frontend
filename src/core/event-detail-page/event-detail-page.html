@@ -1,1 +1,170 @@
-<p>event-detail-page works!</p>
+<div class="mx-auto max-w-6xl">
+    <div class="mb-6">
+        <p-button
+            label="Назад к списку"
+            icon="pi pi-arrow-left"
+            [text]="true"
+            severity="secondary"
+            routerLink="/events" />
+    </div>
+
+    @if (loading()) {
+        <div class="flex justify-center py-20">
+            <i class="pi pi-spin pi-spinner text-4xl text-[var(--p-primary-500)]"></i>
+        </div>
+    } @else if (event(); as e) {
+        <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+
+            <div class="bg-slate-50/50 p-6 md:p-10 border-b border-slate-100">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-3 mb-4">
+                            @if (e.forPetition) {
+                                <p-tag value="В ходатайство" severity="success" [rounded]="true" />
+                            }
+                            <p-tag [value]="e.optCount + ' ОПТ'" severity="info" [rounded]="true" />
+                        </div>
+
+                        <h1 class="text-3xl md:text-4xl font-black text-slate-800 tracking-tight leading-tight">
+                            {{ e.name }}
+                        </h1>
+                    </div>
+
+                    @if (authService.isSecretary() || authService.isChiefSecretary()) {
+                        <div class="flex flex-col items-end text-right shrink-0">
+                            <div class="rounded-lg bg-white/50 px-3 py-2 border border-slate-100 shadow-sm">
+                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Создано</p>
+                                <div class="flex flex-col gap-0.5">
+                        <span class="text-xs font-bold text-slate-600">
+                            <i class="pi pi-calendar-plus text-[10px] mr-1"></i>
+                            {{ e.createdAt | date:'dd.MM.yyyy' }}
+                        </span>
+                                    <span class="text-xs font-medium text-slate-500">
+                            <i class="pi pi-user text-[10px] mr-1"></i>
+                                        {{ e.createdBy }}
+                        </span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3">
+
+                <div class="md:col-span-2 p-6 md:p-10 space-y-8">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <div class="flex items-start gap-4">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                                <i class="pi pi-calendar text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Дата проведения</p>
+                                <p class="text-lg font-bold text-slate-700">{{ e.date | relativeDate }}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-50 text-purple-600">
+                                <i class="pi pi-clock text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Время сбора</p>
+                                <p class="text-lg font-bold text-slate-700">{{ e.time.toString().slice(0, 5) }}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 sm:col-span-2">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-50 text-orange-600">
+                                <i class="pi pi-map-marker text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Место сбора</p>
+                                <p class="text-lg font-bold text-slate-700">{{ e.place }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p-divider />
+
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-black text-slate-800 uppercase tracking-tight">Регистрация участников</h3>
+                            <span class="text-sm font-bold text-slate-500">
+                                {{ e.studentsRegistered }} из {{ e.studentCount }} {{ e.studentCount | plural:'места':'мест':'мест' }}
+                            </span>
+                        </div>
+
+                        <div class="relative pt-2"
+                             [class.cursor-pointer]="authService.isSecretary() || authService.isChiefSecretary()"
+                             (click)="openStudentList()">
+                            <p-progressBar [value]="registrationPercent" [showValue]="false" />
+                            <div class="mt-2 text-right text-xs font-bold text-slate-400">
+                                Заполнено на {{ registrationPercent() | number:'1.0-0' }}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50/30 p-6 md:p-10 border-l border-slate-100">
+                    <div class="sticky top-6 space-y-4">
+                        @if (authService.isStudent()) {
+                            <p-button
+                                label="Записаться на участие"
+                                icon="pi pi-check-circle"
+                                class="w-full"
+                                size="large"
+                                [disabled]="e.studentsRegistered >= e.studentCount" />
+
+                            <p-button
+                                label="Добавить в календарь"
+                                icon="pi pi-calendar-plus"
+                                [outlined]="true"
+                                class="w-full" />
+                        }
+
+                        @if (authService.isSecretary() || authService.isChiefSecretary()) {
+                            <p-button
+                                label="Список студентов"
+                                icon="pi pi-users"
+                                severity="primary"
+                                class="w-full"
+                                size="large"
+                                [routerLink]="['/events', e.eventId, 'participants']" />
+
+                            <p-button
+                                label="Редактировать"
+                                icon="pi pi-pencil"
+                                [outlined]="true"
+                                severity="secondary"
+                                class="w-full"
+                                [routerLink]="['/events', e.eventId, 'edit']" />
+                        }
+
+                        <p-divider />
+
+                        <div class="rounded-2xl bg-white p-4 border border-slate-100">
+                            <p class="text-xs text-slate-400 mb-2">Организационный бонус</p>
+                            <div class="flex items-center gap-2">
+                                <span class="text-2xl font-black text-[var(--p-primary-600)]">{{ e.optCount }}</span>
+                                <span class="text-xs font-bold text-slate-500 uppercase tracking-tighter">ОПТ за посещение</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    } @else {
+        <div class="text-center py-20">
+            <i class="pi pi-exclamation-circle text-5xl text-slate-200 mb-4"></i>
+            <h2 class="text-xl font-bold text-slate-500">Мероприятие не найдено</h2>
+        </div>
+    }
+</div>
+
+<app-event-participants-dialog
+    [(visible)]="showStudentList"
+    [eventId]="id()"/>

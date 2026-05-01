@@ -8,4 +8,6 @@ export interface Event {
     studentsRegistered: number;
     optCount: number;
     forPetition: boolean;
+    createdAt: Date;
+    createdBy: string;
 }

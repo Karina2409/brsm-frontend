@@ -6,7 +6,7 @@ import { Faculty } from '@interfaces/faculty';
 import { StudentSearchParams } from '@interfaces/student-search-params';
 import { Students } from '@services/students';
 import { AllStudents } from '@interfaces/all-students';
-import { StudentCard } from '@components/student-card/student-card';
+import {StudentCard} from '@components/student-card';
 
 @Component({
     selector: 'app-students-page',

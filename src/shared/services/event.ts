@@ -17,6 +17,10 @@ export class EventService {
         return this.http.get<Event[]>(this.getApi());
     }
 
+    getById(eventId: string) {
+        return this.http.get<Event>(`${this.getApi()}/${eventId}`);
+    }
+
     getUpcoming(): Observable<Event[]> {
         return this.http.get<Event[]>(`${this.getApi()}/upcoming`);
     }
@@ -31,5 +35,9 @@ export class EventService {
 
     update(id: number, event: any): Observable<any> {
         return this.http.post(`${this.getApi()}/update/${id}`, event);
+    }
+
+    getParticipants(id: string) {
+        return this.http.get<Event[]>(`${this.getApi()}/${id}/students`);
     }
 }

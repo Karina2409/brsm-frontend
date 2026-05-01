@@ -12,7 +12,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { SliderModule } from 'primeng/slider';
 import { DatePickerModule } from 'primeng/datepicker';
-import { EventCardAdmin } from '@components/event-card-admin/event-card-admin';
+import {EventCardAdmin} from '@components/event-card-admin';
 
 @Component({
     selector: 'app-all-events-page',
