@@ -5,5 +5,6 @@ export type AllStudents = {
     patronymic: string;
     photo: null;
     groupNumber: string;
+    faculty: string;
     eventsCount: number;
 };

@@ -4,7 +4,7 @@ import { AllStudents } from '@interfaces/all-students';
 @Injectable({
     providedIn: 'root',
 })
-export class Students {
+export class StudentService {
     public findStudentsInfo(): AllStudents[] {
         return [
             {
@@ -14,6 +14,7 @@ export class Students {
                 patronymic: 'Иванович',
                 photo: null,
                 groupNumber: 'ИТ-21',
+                faculty: 'ФКП',
                 eventsCount: 2,
             },
             {
@@ -23,6 +24,7 @@ export class Students {
                 patronymic: 'Сергеевна',
                 photo: null,
                 groupNumber: 'ИТ-21',
+                faculty: 'ФКСиС',
                 eventsCount: 3,
             },
             {
@@ -32,6 +34,7 @@ export class Students {
                 patronymic: 'Александрович',
                 photo: null,
                 groupNumber: 'ЭК-22',
+                faculty: 'ИЭФ',
                 eventsCount: 1,
             },
             {
@@ -41,6 +44,7 @@ export class Students {
                 patronymic: 'Владимировна',
                 photo: null,
                 groupNumber: 'ИТ-21',
+                faculty: 'ФИТУ',
                 eventsCount: 5,
             },
             {
@@ -50,6 +54,7 @@ export class Students {
                 patronymic: 'Павлович',
                 photo: null,
                 groupNumber: 'МН-20',
+                faculty: 'ВФ',
                 eventsCount: 3,
             },
             {
@@ -59,6 +64,7 @@ export class Students {
                 patronymic: 'Николаевна',
                 photo: null,
                 groupNumber: 'ЭК-22',
+                faculty: 'ФИБ',
                 eventsCount: 0,
             },
             {
@@ -68,6 +74,7 @@ export class Students {
                 patronymic: 'Андреевич',
                 photo: null,
                 groupNumber: 'ИТ-21',
+                faculty: 'ФКСиС',
                 eventsCount: 4,
             },
             {
@@ -77,6 +84,7 @@ export class Students {
                 patronymic: 'Денисовна',
                 photo: null,
                 groupNumber: 'МН-20',
+                faculty: 'ФКП',
                 eventsCount: 3,
             },
             {
@@ -86,6 +94,7 @@ export class Students {
                 patronymic: 'Максимович',
                 photo: null,
                 groupNumber: 'ЭК-22',
+                faculty: 'ФИТУ',
                 eventsCount: 7,
             },
             {
@@ -95,6 +104,7 @@ export class Students {
                 patronymic: 'Романовна',
                 photo: null,
                 groupNumber: 'ИТ-21',
+                faculty: 'ФКП',
                 eventsCount: 11,
             },
         ];

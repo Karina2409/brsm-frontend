@@ -1,16 +1,152 @@
-<div class="options-container section">
-    <app-search placeholder="Введите фамилию" (searchEvent)="onSearch($event)"></app-search>
+<div class="mx-auto">
 
-    <p-multiSelect
-        [options]="faculties"
-        [(ngModel)]="filters.faculties"
-        placeholder="Факультет"
-        optionLabel="name"
-        class="w-full filter md:w-80"
-        (onChange)="onFacultyChange()" />
-</div>
-<div class="section students-list">
-    @for (student of students; track student.id) {
-        <app-student-card [studentInfo]="student"></app-student-card>
+    <div class="mb-8 flex flex-col gap-6">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-1.5 rounded-full bg-[var(--p-primary-500)]"></div>
+                <h2 class="text-2xl font-black tracking-tighter text-slate-800 uppercase md:text-3xl">Студенты</h2>
+                <span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-slate-500">
+                    {{ filteredStudents().length }}
+                </span>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+                <p-iconfield class="w-full sm:w-64">
+                    <p-inputicon class="pi pi-search" />
+                    <input
+                        type="text"
+                        pInputText
+                        [(ngModel)]="filters.surname"
+                        (input)="applyFilters()"
+                        placeholder="Поиск по фамилии..."
+                        class="p-inputtext-sm w-full border-none bg-slate-100 focus:ring-2" />
+                </p-iconfield>
+
+                <p-button
+                    [icon]="showFilters() ? 'pi pi-filter-slash' : 'pi pi-filter'"
+                    [label]="showFilters() ? 'Скрыть' : 'Фильтры'"
+                    [outlined]="!showFilters()"
+                    size="small"
+                    (onClick)="showFilters.set(!showFilters())" />
+            </div>
+        </div>
+
+        @if (showFilters()) {
+            <div class="grid grid-cols-1 gap-8 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-all md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+
+                <div class="flex flex-col gap-2">
+                    <label class="text-[10px] font-black tracking-widest text-slate-400 uppercase">
+                        Факультеты
+                    </label>
+                    <p-multiSelect
+                        [options]="faculties"
+                        [(ngModel)]="filters.faculties"
+                        placeholder="Выберите факультеты"
+                        optionLabel="name"
+                        display="chip"
+                        class="w-full"
+                        styleClass="w-full bg-slate-50 border-slate-100 focus:ring-0"
+                        (onChange)="applyFilters()" />
+                </div>
+
+                <div class="flex items-center">
+                    <div class="flex w-full flex-col gap-4">
+                        <div class="flex items-center justify-between">
+                            <label class="text-[10px] font-black tracking-widest text-slate-400 uppercase">
+                                Посещено мероприятий
+                            </label>
+                            <span class="text-xs font-bold text-[var(--p-primary-600)]">
+                            {{ filters.eventsRange[0] }} - {{ filters.eventsRange[1] }}
+                        </span>
+                        </div>
+                        <div class="px-2 pt-2">
+                            <p-slider
+                                [(ngModel)]="filters.eventsRange"
+                                [range]="true"
+                                [min]="0"
+                                [max]="50"
+                                (onChange)="applyFilters()"
+                                class="w-full" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-end justify-end border-t border-slate-50 pt-4 md:col-span-2 lg:col-span-1 xl:col-span-2 lg:border-t-0 lg:pt-0">
+                    <p-button
+                        label="Сбросить все фильтры"
+                        icon="pi pi-refresh"
+                        [text]="true"
+                        severity="secondary"
+                        size="small"
+                        (onClick)="resetFilters()" />
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (loading()) {
+        <div class="flex flex-col gap-3">
+            @for (_ of [1, 2, 3, 4, 5, 6]; track $index) {
+                <div class="flex items-center justify-between rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+                    <div class="flex items-center gap-4 flex-1">
+                        <p-skeleton shape="circle" size="3.5rem" />
+                        <div class="flex-1 space-y-2 max-w-xs">
+                            <p-skeleton width="70%" height="1.25rem" />
+                            <p-skeleton width="40%" height="0.85rem" />
+                        </div>
+                    </div>
+                    <p-skeleton width="3rem" height="1.5rem" borderRadius="1rem" />
+                </div>
+            }
+        </div>
+    }
+
+    @else if (filteredStudents().length > 0) {
+        <div class="mb-4 flex items-center justify-between px-1">
+            <div class="flex items-center gap-2 text-sm text-slate-500">
+                <span>Найдено студентов:</span>
+                <span class="font-bold text-slate-800">{{ filteredStudents().length }}</span>
+            </div>
+
+            <div class="hidden text-[11px] font-bold uppercase tracking-wider text-slate-400 sm:block">
+                Показаны записи {{ first() + 1 }} — {{ (first() + rows() > filteredStudents().length) ? filteredStudents().length : (first() + rows()) }}
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-3">
+            @for (student of paginatedStudents(); track student.id) {
+                <app-student-card [studentInfo]="student"></app-student-card>
+            }
+        </div>
+
+        <div class="mt-8 flex justify-center">
+            <p-paginator
+                (onPageChange)="onPageChange($event)"
+                [first]="first()"
+                [rows]="rows()"
+                [totalRecords]="filteredStudents().length"
+                [rowsPerPageOptions]="[10, 20, 50]"
+                class="bg-transparent border-none" />
+        </div>
+    }
+
+    @else {
+        <div class="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 bg-white px-6 py-20 shadow-sm">
+            <div class="relative mb-6">
+                <i class="pi pi-users text-6xl text-slate-100"></i>
+                <i class="pi pi-search absolute -top-2 -right-2 text-xl text-[var(--p-primary-400)]"></i>
+            </div>
+            <h3 class="text-xl font-black tracking-tight text-slate-800">Студенты не найдены</h3>
+            <p class="mt-2 mb-6 max-w-[350px] text-center text-slate-500">
+                Похоже, ни один студент не соответствует заданным параметрам. Попробуйте изменить фильтры.
+            </p>
+            <p-button
+                label="Сбросить фильтры"
+                icon="pi pi-refresh"
+                severity="secondary"
+                [outlined]="true"
+                size="small"
+                (onClick)="resetFilters()" />
+        </div>
     }
 </div>

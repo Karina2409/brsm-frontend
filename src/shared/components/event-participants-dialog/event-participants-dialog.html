@@ -14,7 +14,7 @@
                 <p class="text-slate-400 text-sm font-medium">Загрузка списка...</p>
             </div>
         } @else if (participants().length > 0) {
-            <p-table [value]="participants()" [scrollable]="true" scrollHeight="400px" styleClass="p-datatable-sm">
+            <p-table [value]="participants()" [scrollable]="true" scrollHeight="400px" class="p-datatable-sm">
                 <ng-template pTemplate="header">
                     <tr>
                         <th class="bg-slate-50 text-slate-500 font-bold text-[11px] uppercase">Студент</th>

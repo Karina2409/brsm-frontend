@@ -23,6 +23,7 @@ import { guestGuard } from '@guards/guest-guard';
 import { authGuard } from '@guards/auth-guard';
 import { roleGuard } from '@guards/role-guard';
 import { eventsRedirectGuard } from '@guards/events-redirect-guard';
+import {EventParticipantsPage} from '@pages/event-participants-page';
 
 export const routes: Routes = [
     {
@@ -84,6 +85,16 @@ export const routes: Routes = [
                 component: EventDetailPage,
                 canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
             },
+            {
+                path: ':id/edit',
+                component: CreateEventPage,
+                canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
+            },
+            {
+                path: ':id/participants',
+                component: EventParticipantsPage,
+                canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])]
+            }
         ],
     },
     {
