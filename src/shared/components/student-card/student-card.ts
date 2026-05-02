@@ -1,9 +1,10 @@
 import { Component, input } from '@angular/core';
 import { AllStudents } from '@interfaces/all-students';
+import {TooltipModule} from 'primeng/tooltip';
 
 @Component({
     selector: 'app-student-card',
-    imports: [],
+    imports: [TooltipModule],
     templateUrl: './student-card.html',
     styleUrl: './student-card.scss',
 })

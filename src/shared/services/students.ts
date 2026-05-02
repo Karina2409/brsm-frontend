@@ -1,112 +1,20 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import { AllStudents } from '@interfaces/all-students';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
 })
 export class StudentService {
-    public findStudentsInfo(): AllStudents[] {
-        return [
-            {
-                id: 1,
-                surname: 'Иванов',
-                name: 'Иван',
-                patronymic: 'Иванович',
-                photo: null,
-                groupNumber: 'ИТ-21',
-                faculty: 'ФКП',
-                eventsCount: 2,
-            },
-            {
-                id: 2,
-                surname: 'Петрова',
-                name: 'Анна',
-                patronymic: 'Сергеевна',
-                photo: null,
-                groupNumber: 'ИТ-21',
-                faculty: 'ФКСиС',
-                eventsCount: 3,
-            },
-            {
-                id: 3,
-                surname: 'Сидоров',
-                name: 'Дмитрий',
-                patronymic: 'Александрович',
-                photo: null,
-                groupNumber: 'ЭК-22',
-                faculty: 'ИЭФ',
-                eventsCount: 1,
-            },
-            {
-                id: 4,
-                surname: 'Козлова',
-                name: 'Екатерина',
-                patronymic: 'Владимировна',
-                photo: null,
-                groupNumber: 'ИТ-21',
-                faculty: 'ФИТУ',
-                eventsCount: 5,
-            },
-            {
-                id: 5,
-                surname: 'Морозов',
-                name: 'Алексей',
-                patronymic: 'Павлович',
-                photo: null,
-                groupNumber: 'МН-20',
-                faculty: 'ВФ',
-                eventsCount: 3,
-            },
-            {
-                id: 6,
-                surname: 'Новикова',
-                name: 'Ольга',
-                patronymic: 'Николаевна',
-                photo: null,
-                groupNumber: 'ЭК-22',
-                faculty: 'ФИБ',
-                eventsCount: 0,
-            },
-            {
-                id: 7,
-                surname: 'Волков',
-                name: 'Сергей',
-                patronymic: 'Андреевич',
-                photo: null,
-                groupNumber: 'ИТ-21',
-                faculty: 'ФКСиС',
-                eventsCount: 4,
-            },
-            {
-                id: 8,
-                surname: 'Лебедева',
-                name: 'Мария',
-                patronymic: 'Денисовна',
-                photo: null,
-                groupNumber: 'МН-20',
-                faculty: 'ФКП',
-                eventsCount: 3,
-            },
-            {
-                id: 9,
-                surname: 'Федоров',
-                name: 'Артем',
-                patronymic: 'Максимович',
-                photo: null,
-                groupNumber: 'ЭК-22',
-                faculty: 'ФИТУ',
-                eventsCount: 7,
-            },
-            {
-                id: 10,
-                surname: 'Смирнова',
-                name: 'Дарья',
-                patronymic: 'Романовна',
-                photo: null,
-                groupNumber: 'ИТ-21',
-                faculty: 'ФКП',
-                eventsCount: 11,
-            },
-        ];
+    private readonly http = inject(HttpClient);
+    private getApi() {
+        return 'http://localhost:8080/students';
+    }
+
+    public findStudentsInfo(): Observable<AllStudents[]> {
+        return this.http.get<AllStudents[]>(`${this.getApi()}/only-students`, {
+            withCredentials: true
+        });
     }
 }

@@ -1,10 +1,18 @@
+import {FacultyEnum} from '@enums/faculty';
+
 export type AllStudents = {
-    id: number;
+    studentId: number;
     surname: string;
     name: string;
     patronymic: string;
     photo: null;
     groupNumber: string;
-    faculty: string;
+    faculty: FacultyEnum;
     eventsCount: number;
+    brsmMember: boolean;
+    dormitoryResidence: boolean;
+    dormBlockNumber?: string;
+    dormNumber?: number;
+    phoneNumber?: string;
+    telegramUsername?: string;
 };

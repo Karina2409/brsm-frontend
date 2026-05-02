@@ -9,11 +9,12 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { SliderModule } from 'primeng/slider';
 
-import { Faculty } from '@interfaces/faculty';
+import { FacultyOptions } from '@interfaces/faculty-options';
 import { StudentService } from '@services/students';
 import { AllStudents } from '@interfaces/all-students';
 import { StudentCard } from '@components/student-card';
 import {PaginatorModule} from 'primeng/paginator';
+import {FacultyEnum} from '@enums/faculty';
 
 @Component({
     selector: 'app-students-page',
@@ -50,19 +51,19 @@ export class StudentsPage implements OnInit {
         return this.filteredStudents().slice(start, start + this.rows());
     });
 
-    public faculties: Faculty[] = [
-        { name: 'ФКП', code: 'FKP' },
-        { name: 'ФИТУ', code: 'FITU' },
-        { name: 'ФРЭ', code: 'FRE' },
-        { name: 'ФКСиС', code: 'FKSIS' },
-        { name: 'ФИБ', code: 'FIB' },
-        { name: 'ИЭФ', code: 'IEF' },
-        { name: 'ВФ', code: 'VF' },
+    public faculties: FacultyOptions[] = [
+        { name: FacultyEnum.FKP, code: 'FKP' },
+        { name: FacultyEnum.FITU, code: 'FITU' },
+        { name: FacultyEnum.FRE, code: 'FRE' },
+        { name: FacultyEnum.FKSIS, code: 'FKSIS' },
+        { name: FacultyEnum.FIB, code: 'FIB' },
+        { name: FacultyEnum.IEF, code: 'IEF' },
+        { name: FacultyEnum.VF, code: 'VF' },
     ];
 
     public filters = {
         surname: '',
-        faculties: [] as Faculty[],
+        faculties: [] as FacultyOptions[],
         eventsRange: [0, 50] as [number, number]
     };
 
@@ -72,12 +73,17 @@ export class StudentsPage implements OnInit {
 
     public loadStudents() {
         this.loading.set(true);
-        setTimeout(() => {
-            const data = this.studentsService.findStudentsInfo();
-            this.students.set(data);
-            this.applyFilters();
-            this.loading.set(false);
-        }, 400);
+        this.studentsService.findStudentsInfo().subscribe({
+            next: (data) => {
+                this.students.set(data);
+                this.applyFilters();
+                this.loading.set(false);
+            },
+            error: (err) => {
+                console.error('Ошибка при загрузке студентов:', err);
+                this.loading.set(false);
+            }
+        });
     }
 
     public applyFilters() {
@@ -88,9 +94,12 @@ export class StudentsPage implements OnInit {
             result = result.filter(s => s.surname.toLowerCase().includes(searchStr));
         }
 
-        //todo: пофиксить фильтр по факультету, чтобы работало
         if (this.filters.faculties && this.filters.faculties.length > 0) {
-            const selectedCodes = this.filters.faculties.map(f => f.code);
+            const selectedFacultyNames = this.filters.faculties.map(f => f.name);
+
+            result = result.filter(student =>
+                selectedFacultyNames.includes(student.faculty as unknown as string)
+            );
         }
 
         const [min, max] = this.filters.eventsRange;
