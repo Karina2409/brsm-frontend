@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Event } from '@interfaces/event';
+import {StudentFullName} from '@interfaces/student-full-name';
 
 @Injectable({
     providedIn: 'root',
@@ -29,15 +30,15 @@ export class EventService {
         return this.http.get<Event[]>(`${this.getApi()}/deleted`);
     }
 
-    create(event: any): Observable<any> {
-        return this.http.post(`${this.getApi()}/create`, event);
+    create(event: Event): Observable<Event> {
+        return this.http.post<Event>(`${this.getApi()}/create`, event);
     }
 
-    update(id: number, event: any): Observable<any> {
-        return this.http.post(`${this.getApi()}/update/${id}`, event);
+    update(id: number, event: Event): Observable<Event> {
+        return this.http.post<Event>(`${this.getApi()}/update/${id}`, event);
     }
 
     getParticipants(id: string) {
-        return this.http.get<Event[]>(`${this.getApi()}/${id}/students`);
+        return this.http.get<StudentFullName[]>(`${this.getApi()}/${id}/students`);
     }
 }

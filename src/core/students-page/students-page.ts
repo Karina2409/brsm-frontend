@@ -15,6 +15,7 @@ import { AllStudents } from '@interfaces/all-students';
 import { StudentCard } from '@components/student-card';
 import {PaginatorModule} from 'primeng/paginator';
 import {FacultyEnum} from '@enums/faculty';
+import {PaginatorState} from 'primeng/types/paginator';
 
 @Component({
     selector: 'app-students-page',
@@ -109,8 +110,10 @@ export class StudentsPage implements OnInit {
         this.first.set(0);
     }
 
-    public onPageChange(event: any) {
-        this.first.set(event.first);
+    public onPageChange(event: PaginatorState) {
+        if (event.first) {
+            this.first.set(event.first);
+        }
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 

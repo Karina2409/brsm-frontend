@@ -4,6 +4,7 @@ import {DialogModule} from 'primeng/dialog';
 import {ButtonModule} from 'primeng/button';
 import {TableModule} from 'primeng/table';
 import {RouterModule} from '@angular/router';
+import {StudentFullName} from '@interfaces/student-full-name';
 
 @Component({
     selector: 'app-event-participants-dialog',
@@ -16,7 +17,7 @@ export class EventParticipantsDialog {
     eventId = input.required<string>();
 
     //todo: заменить на интерфейс студентов
-    participants = signal<any[]>([]);
+    participants = signal<StudentFullName[]>([]);
     loading = signal(false);
 
     private eventService = inject(EventService);
