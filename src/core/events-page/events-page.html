@@ -1,1 +1,45 @@
-<p>events-page works!</p>
+<p-toast />
+
+<div class="mx-auto max-w-7xl px-4 py-8">
+    <div class="mb-8 flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-black tracking-tight text-slate-800 uppercase">
+                Предстоящие мероприятия
+            </h1>
+            <p class="text-slate-500">Записывайтесь и получайте бонусы к рейтингу</p>
+        </div>
+
+        <div class="hidden sm:flex items-center gap-3 rounded-2xl bg-white p-2 shadow-sm border border-slate-100">
+            <span class="pl-3 text-xs font-bold text-slate-400 uppercase">Статус:</span>
+            <div class="flex items-center gap-2 rounded-xl bg-green-50 px-3 py-1.5 text-green-600">
+                <i class="pi pi-user text-sm"></i>
+<!--                TODO: выводить реальный статус пользователя-->
+                <span class="text-sm font-bold">Активен</span>
+            </div>
+        </div>
+    </div>
+
+    @if (loading()) {
+        <div class="flex h-64 items-center justify-center">
+            <p-progressSpinner class="w-12 h-12" strokeWidth="4" />
+        </div>
+    } @else {
+        @if (events().length > 0) {
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                @for (item of events(); track item.eventId) {
+                    <app-event-card-student
+                        [event]="item"
+                        [isRegistered]="registeredEventIds().has(item.eventId)"
+                        [loading]="actionLoadingId() === item.eventId"
+                        (onAction)="handleEventAction($event)" />
+                }
+            </div>
+        } @else {
+            <div class="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 bg-white py-20 shadow-sm">
+                <i class="pi pi-calendar-times text-6xl text-slate-200 mb-4"></i>
+                <h3 class="text-xl font-bold text-slate-800">Мероприятий пока нет</h3>
+                <p class="text-slate-500">Загляните позже, чтобы не пропустить ничего интересного</p>
+            </div>
+        }
+    }
+</div>
