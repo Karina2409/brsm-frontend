@@ -24,6 +24,7 @@ import { authGuard } from '@guards/auth-guard';
 import { roleGuard } from '@guards/role-guard';
 import { eventsRedirectGuard } from '@guards/events-redirect-guard';
 import {EventParticipantsPage} from '@pages/event-participants-page';
+import {numberIdGuard} from '@guards/number-id-guard';
 
 export const routes: Routes = [
     {
@@ -83,7 +84,7 @@ export const routes: Routes = [
             {
                 path: ':id',
                 component: EventDetailPage,
-                canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
+                canActivate: [numberIdGuard, roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
             },
             {
                 path: ':id/edit',
@@ -146,4 +147,12 @@ export const routes: Routes = [
         component: MySettingsPage,
         canActivate: [authGuard],
     },
+    // {
+    //     path: '404',
+    //     component: NotFoundPage
+    // },
+    // {
+    //     path: '**',
+    //     redirectTo: '404'
+    // }
 ];

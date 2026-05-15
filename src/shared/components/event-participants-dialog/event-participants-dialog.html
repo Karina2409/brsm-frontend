@@ -23,8 +23,8 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-student>
                     <tr class="border-b border-slate-50">
-                        <td class="py-3 font-semibold text-slate-700">{{ student.fullName }}</td>
-                        <td class="py-3 text-slate-500">{{ student.groupName }}</td>
+                        <td class="py-3 font-semibold text-slate-700">{{ student.surname }} {{ student.name }} {{ student.patronymic }}</td>
+                        <td class="py-3 text-slate-500">{{ student.groupNumber }}</td>
                     </tr>
                 </ng-template>
             </p-table>
@@ -51,8 +51,7 @@
                     label="Полный список"
                     icon="pi pi-external-link"
                     size="small"
-                    [routerLink]="['/events', eventId(), 'participants']"
-                    (onClick)="visible.set(false)" />
+                    (onClick)="navigateToFullList()" />
             </div>
         </div>
     </ng-template>

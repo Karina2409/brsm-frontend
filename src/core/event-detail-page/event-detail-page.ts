@@ -40,6 +40,7 @@ export class EventDetailPage implements OnInit {
             next: (data: Event) => {
                 this.event.set(data);
                 this.loading.set(false);
+                console.log(this.event())
             },
             error: () => this.loading.set(false)
         });

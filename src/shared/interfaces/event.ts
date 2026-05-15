@@ -1,8 +1,8 @@
 export interface Event {
     eventId: number;
     name: string;
-    date: Date;
-    time: Date;
+    date: string | Date;
+    time: string | Date;
     place: string;
     studentCount: number;
     studentsRegistered: number;

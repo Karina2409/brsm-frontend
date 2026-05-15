@@ -1,1 +1,166 @@
-<p>create-event-page works!</p>
+<p-toast />
+
+<div class="mx-auto max-w-3xl px-4 py-6">
+    <div class="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex items-center gap-3">
+            <div class="h-8 w-1.5 rounded-full bg-[var(--p-primary-500)]"></div>
+            <h2 class="text-2xl font-black tracking-tighter text-slate-800 uppercase md:text-3xl">
+                {{ isEditMode() ? 'Редактирование' : 'Создание' }} мероприятия
+            </h2>
+        </div>
+        <p-button
+            label="Назад к списку"
+            icon="pi pi-arrow-left"
+            [text]="true"
+            severity="secondary"
+            size="small"
+            routerLink="/events/all" />
+    </div>
+
+    @if (loading()) {
+        <div class="rounded-2xl border border-slate-100 bg-white p-8 shadow-sm space-y-6">
+            <div class="h-10 w-full bg-slate-100 animate-pulse rounded-xl"></div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="h-10 bg-slate-100 animate-pulse rounded-xl"></div>
+                <div class="h-10 bg-slate-100 animate-pulse rounded-xl"></div>
+            </div>
+            <div class="h-24 w-full bg-slate-100 animate-pulse rounded-xl"></div>
+        </div>
+    } @else {
+        <form [formGroup]="eventForm" (ngSubmit)="onSubmit()" class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm md:p-8">
+            <div class="flex flex-col gap-6">
+
+                <div class="flex flex-col gap-2">
+                    <label class="text-[11px] font-black tracking-widest text-slate-400 uppercase">
+                        Название мероприятия <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        pInputText
+                        formControlName="name"
+                        placeholder="Введите полное название..."
+                        class="w-full border-slate-200 bg-slate-50 focus:bg-white transition-all rounded-xl"
+                        [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('name')}" />
+                    @if (isFieldInvalid('name')) {
+                        <small class="text-xs font-bold text-red-500">Название обязательно</small>
+                    }
+                </div>
+
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[11px] font-black tracking-widest text-slate-400 uppercase">
+                            Дата проведения <span class="text-red-500">*</span>
+                        </label>
+                        <p-date-picker
+                            formControlName="date"
+                            [showIcon]="true"
+                            dateFormat="dd.mm.yy"
+                            [minDate]="isEditMode() ? null : minDate"
+                            placeholder="Выберите дату"
+                            class="w-full"
+                            inputStyleClass="w-full border-slate-200 bg-slate-50 rounded-xl"
+                            [styleClass]="isFieldInvalid('date') ? 'ng-invalid ng-dirty' : ''" />
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[11px] font-black tracking-widest text-slate-400 uppercase">
+                            Время начала <span class="text-red-500">*</span>
+                        </label>
+                        <p-date-picker
+                            formControlName="time"
+                            [timeOnly]="true"
+                            iconDisplay="input"
+                            [showIcon]="true"
+                            placeholder="Выберите время"
+                            class="w-full"
+                            inputStyleClass="w-full border-slate-200 bg-slate-50 rounded-xl"
+                            [styleClass]="isFieldInvalid('time') ? 'ng-invalid ng-dirty' : ''">
+                            <ng-template #inputicon>
+                                <i class="pi pi-clock"></i>
+                            </ng-template>
+                        </p-date-picker>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label class="text-[11px] font-black tracking-widest text-slate-400 uppercase">
+                        Место сбора <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        pInputText
+                        formControlName="place"
+                        placeholder="Аудитория, корпус или адрес..."
+                        class="w-full border-slate-200 bg-slate-50 focus:bg-white transition-all rounded-xl"
+                        [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('place')}" />
+                </div>
+
+                <div class="my-2 border-t border-slate-100"></div>
+
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[11px] font-black tracking-widest text-slate-400 uppercase">
+                            Количество студентов
+                        </label>
+                        <p-inputNumber
+                            formControlName="studentCount"
+                            [showButtons]="true"
+                            [min]="1"
+                            [max]="500"
+                            buttonLayout="horizontal"
+                            decrementButtonClass="p-button-secondary"
+                            incrementButtonClass="p-button-secondary"
+                            incrementButtonIcon="pi pi-plus"
+                            decrementButtonIcon="pi pi-minus"
+                            class="w-full"
+                            inputStyleClass="text-center border-slate-200 bg-slate-50 rounded-xl" />
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[11px] font-black tracking-widest text-slate-400 uppercase">
+                            Часы ОПТ
+                        </label>
+                        <p-inputNumber
+                            formControlName="optCount"
+                            [showButtons]="true"
+                            [min]="0"
+                            [max]="20"
+                            buttonLayout="horizontal"
+                            decrementButtonClass="p-button-secondary"
+                            incrementButtonClass="p-button-secondary"
+                            incrementButtonIcon="pi pi-plus"
+                            decrementButtonIcon="pi pi-minus"
+                            class="w-full"
+                            inputStyleClass="text-center border-slate-200 bg-slate-50 rounded-xl" />
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50/50 p-4 mt-2">
+                    <div class="flex flex-col gap-0.5">
+                        <span class="text-sm font-bold text-slate-700">Для ходатайства</span>
+                        <span class="text-xs text-slate-400">Включите, если данное мероприятие будет учитываться при выдаче ходатайства</span>
+                    </div>
+                    <p-toggleswitch formControlName="forPetition" />
+                </div>
+
+                <div class="mt-4 flex items-center justify-end gap-3 border-t border-slate-100 pt-6">
+                    <p-button
+                        label="Отмена"
+                        severity="secondary"
+                        [outlined]="true"
+                        [disabled]="submitting()"
+                        [routerLink]="[isEditMode() ? '/events/all' : '/events']"
+                        styleClass="px-5 rounded-xl font-bold" />
+
+                    <p-button
+                        [label]="isEditMode() ? 'Сохранить изменения' : 'Создать мероприятие'"
+                        type="submit"
+                        icon="pi pi-check"
+                        [loading]="submitting()"
+                        styleClass="px-6 rounded-xl font-bold shadow-md shadow-blue-100" />
+                </div>
+
+            </div>
+        </form>
+    }
+</div>

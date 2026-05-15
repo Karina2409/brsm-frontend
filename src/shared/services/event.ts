@@ -14,30 +14,47 @@ export class EventService {
         return 'http://localhost:8080/events';
     }
 
+    // GET /events
     getAll(): Observable<Event[]> {
         return this.http.get<Event[]>(this.getApi());
     }
 
+    // GET /events/{eventId}
     getById(eventId: string) {
         return this.http.get<Event>(`${this.getApi()}/${eventId}`);
     }
 
+    // GET /events/upcoming
     getUpcoming(): Observable<Event[]> {
         return this.http.get<Event[]>(`${this.getApi()}/upcoming`);
     }
 
+    // GET /events/past
+    getPast(): Observable<Event[]> {
+        return this.http.get<Event[]>(`${this.getApi()}/past`);
+    }
+
+    // TODO: добавить метод на бэк в контроллер (получение удаленных мероприятий)
     getDeleted(): Observable<Event[]> {
         return this.http.get<Event[]>(`${this.getApi()}/deleted`);
     }
 
+    // POST /events
     create(event: Event): Observable<Event> {
-        return this.http.post<Event>(`${this.getApi()}/create`, event);
+        return this.http.post<Event>(`${this.getApi()}`, event);
     }
 
+    // PUT /events/{eventId}
     update(id: number, event: Event): Observable<Event> {
-        return this.http.post<Event>(`${this.getApi()}/update/${id}`, event);
+        return this.http.post<Event>(`${this.getApi()}/${id}`, event);
     }
 
+    // DELETE /events/{eventId}
+    delete(id: number): Observable<void> {
+        return this.http.delete<void>(`${this.getApi()}/${id}`);
+    }
+
+    // GET /events/{eventId}/students
     getParticipants(id: string) {
         return this.http.get<StudentFullName[]>(`${this.getApi()}/${id}/students`);
     }

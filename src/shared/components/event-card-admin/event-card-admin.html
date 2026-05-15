@@ -42,12 +42,12 @@
     <div class="space-y-2">
         <div class="flex justify-between text-[11px] font-bold tracking-wider text-slate-500 uppercase">
             <span class="flex items-center gap-1"> <i class="pi pi-users text-[10px]"></i> Запись </span>
-            <span class="text-slate-700">{{ 4 }} / {{ event().studentCount }}</span>
+            <span class="text-slate-700">{{ event().studentsRegistered }} / {{ event().studentCount }}</span>
         </div>
         <div class="h-2 w-full overflow-hidden rounded-full bg-slate-100">
             <div
                 class="h-full bg-[var(--p-primary-500)] shadow-[0_0_8px_rgba(var(--p-primary-500-rgb),0.4)] transition-all duration-500"
-                [style.width.%]="(4 / event().studentCount) * 100"></div>
+                [style.width.%]="(event().studentsRegistered / event().studentCount) * 100"></div>
         </div>
     </div>
 
