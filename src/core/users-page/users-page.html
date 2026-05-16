@@ -1,1 +1,155 @@
-<p>users-page works!</p>
+<p-toast />
+<p-confirmDialog
+    [style]="{ width: '90vw', 'max-width': '500px' }"
+    [breakpoints]="{ '960px': '75vw', '640px': '100vw' }" />
+
+<div class="mx-auto">
+
+    <div class="mb-8 flex flex-col gap-6">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-1.5 rounded-full bg-blue-500"></div>
+                <h1 class="text-2xl font-black tracking-tighter text-slate-800 uppercase md:text-3xl">Управление пользователями</h1>
+                <span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-slate-500">
+                    {{ filteredUsers().length }}
+                </span>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+                <p-iconfield class="w-full sm:w-64">
+                    <p-inputicon class="pi pi-search" />
+                    <input
+                        type="text"
+                        pInputText
+                        [(ngModel)]="filters.searchQuery"
+                        (input)="applyFilters()"
+                        placeholder="Поиск по ФИО или логину..."
+                        class="p-inputtext-sm w-full border-none bg-slate-100 focus:ring-2 focus:ring-blue-500" />
+                </p-iconfield>
+
+                <p-button
+                    [icon]="showFilters() ? 'pi pi-filter-slash' : 'pi pi-filter'"
+                    [label]="showFilters() ? 'Скрыть' : 'Фильтры'"
+                    [outlined]="!showFilters()"
+                    severity="secondary"
+                    size="small"
+                    styleClass="rounded-xl font-bold"
+                    (onClick)="showFilters.set(!showFilters())" />
+            </div>
+        </div>
+
+        @if (showFilters()) {
+            <div class="grid grid-cols-1 gap-6 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-all md:grid-cols-2 lg:grid-cols-3 animate-[fadeIn_0.2s_ease-out]">
+
+                <div class="flex flex-col gap-2">
+                    <label class="text-[10px] font-black tracking-widest text-slate-400 uppercase">
+                        Факультеты
+                    </label>
+                    <p-multiSelect
+                        [options]="faculties()"
+                        [(ngModel)]="filters.faculties"
+                        placeholder="Выберите факультеты"
+                        optionLabel="name"
+                        optionValue="value"
+                        display="chip"
+                        styleClass="w-full bg-slate-50 border-none rounded-xl"
+                        (onChange)="applyFilters()" />
+                </div>
+
+                <div class="flex items-end justify-start md:justify-end lg:col-span-2">
+                    <p-button
+                        label="Сбросить все фильтры"
+                        icon="pi pi-refresh"
+                        [text]="true"
+                        severity="secondary"
+                        size="small"
+                        styleClass="font-bold"
+                        (onClick)="resetFilters()" />
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (loading()) {
+        <div class="flex h-64 items-center justify-center">
+            <p-progressSpinner class="w-12 h-12" strokeWidth="4" />
+        </div>
+    } @else {
+        <div class="space-y-3">
+
+            <div class="hidden lg:grid grid-cols-12 gap-4 px-6 text-[11px] font-black tracking-widest text-slate-400 uppercase">
+                <div class="col-span-4">Пользователь / Логин</div>
+                <div class="col-span-2">Факультет</div>
+                <div class="col-span-2">Группа</div>
+                <div class="col-span-2">Последний вход</div>
+                <div class="col-span-2 text-right">Роль системы</div>
+            </div>
+
+            @for (user of paginatedUsers(); track user.userId) {
+                <div class="grid grid-cols-1 gap-4 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition-all duration-200 hover:border-blue-100 hover:shadow-md lg:grid-cols-12 lg:items-center lg:px-6 lg:py-4">
+
+                    <div class="col-span-1 flex items-center gap-3 lg:col-span-4">
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-50 font-bold text-slate-600 border border-slate-100">
+                            {{ user.surname ? user.surname.charAt(0) : 'U' }}
+                        </div>
+                        <div class="flex flex-col min-w-0">
+                            <span class="text-sm font-black text-slate-800 truncate">{{ getFio(user) }}</span>
+                            <span class="text-xs font-medium text-slate-400 truncate">&#64;{{ user.login }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-span-1 flex flex-col lg:col-span-2">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase lg:hidden">Факультет</span>
+                        <span class="text-xs font-extrabold text-slate-700 mt-0.5 lg:mt-0">
+                            {{ user.faculty || '—' }}
+                        </span>
+                    </div>
+
+                    <div class="col-span-1 flex flex-col lg:col-span-2">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase lg:hidden">Группа</span>
+                        <span class="text-xs font-bold text-slate-600 mt-0.5 lg:mt-0">
+                            {{ user.groupNumber || '—' }}
+                        </span>
+                    </div>
+
+                    <div class="col-span-1 flex flex-col lg:col-span-2">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase lg:hidden">Последний вход</span>
+                        <span class="text-xs font-semibold text-slate-500 mt-0.5 lg:mt-0">
+                            {{ user.lastLogin ? (user.lastLogin | date: 'dd.MM.yyyy HH:mm') : 'Ни разу не входил' }}
+                        </span>
+                    </div>
+
+                    <div class="col-span-1 flex flex-col lg:col-span-2 lg:items-end">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase mb-1 lg:hidden">Роль системы</span>
+                        <p-select
+                            [options]="rolesList"
+                            [(ngModel)]="user.role"
+                            optionLabel="label"
+                            optionValue="value"
+                            (onChange)="onRoleChange(user, $event.value)"
+                            styleClass="w-full lg:w-40 rounded-xl bg-slate-50 border-none font-bold text-xs text-slate-700" />
+                    </div>
+
+                </div>
+            } @empty {
+                <div class="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-100 bg-white py-16 text-center shadow-sm">
+                    <i class="pi pi-users text-5xl text-slate-200 mb-3"></i>
+                    <h3 class="text-lg font-bold text-slate-700">Пользователи не найдены</h3>
+                </div>
+            }
+
+            @if (filteredUsers().length > 0) {
+                <div class="pt-4">
+                    <p-paginator
+                        (onPageChange)="onPageChange($event)"
+                        [first]="first()"
+                        [rows]="rows()"
+                        [totalRecords]="filteredUsers().length"
+                        [rowsPerPageOptions]="[10, 25, 100]"
+                        styleClass="bg-transparent border-none py-2 font-bold text-xs" />
+                </div>
+            }
+
+        </div>
+    }
+</div>
