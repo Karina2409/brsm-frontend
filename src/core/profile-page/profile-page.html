@@ -1,1 +1,209 @@
-<p>profile-page works!</p>
+<p-toast />
+
+<div class="mx-auto max-w-4xl px-4 py-8">
+
+    <div class="mb-8 flex items-center justify-between border-b border-slate-100 pb-5">
+        <div class="flex items-center gap-3">
+            <div class="h-8 w-1.5 rounded-full bg-[var(--p-primary-500)]"></div>
+            <h2 class="text-2xl font-black tracking-tighter text-slate-800 uppercase md:text-3xl">
+                Личный кабинет
+            </h2>
+        </div>
+
+        @if (!isEditMode() && !loading()) {
+            <p-button
+                label="Редактировать профиль"
+                icon="pi pi-pencil"
+                size="small"
+                [outlined]="true"
+                (onClick)="isEditMode.set(true)" />
+        }
+    </div>
+
+    @if (loading()) {
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-3 animate-pulse">
+            <div class="h-64 rounded-2xl bg-slate-100 md:col-span-1"></div>
+            <div class="h-64 rounded-2xl bg-slate-100 md:col-span-2"></div>
+        </div>
+    } @else {
+
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+
+            <div class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm text-center flex flex-col items-center h-fit">
+                <div class="relative group cursor-pointer mb-4" (click)="triggerFileInput()">
+
+                    <div class="w-36 h-36 rounded-full overflow-hidden border-4 border-slate-50 shadow-inner bg-slate-100 flex items-center justify-center">
+                        @if (photoPreview()) {
+                            <img [src]="photoPreview()" alt="Avatar" class="w-full h-full object-cover">
+                        } @else {
+                            <i class="pi pi-user text-slate-300 text-5xl"></i>
+                        }
+                    </div>
+
+                    <div class="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-xs font-bold gap-1">
+                        <i class="pi pi-camera text-xl"></i>
+                        <span>Изменить фото</span>
+                    </div>
+                </div>
+
+                <input #fileInput type="file" accept="image/*" class="hidden" (change)="onFileSelected($event)">
+
+                <h3 class="text-lg font-black text-slate-800 leading-tight">
+                    {{ student()?.surname }} {{ student()?.name }}
+                </h3>
+                <p class="text-sm font-medium text-slate-400 mt-1">Группа {{ student()?.groupNumber }}</p>
+
+                <div class="w-full border-t border-slate-100 my-4"></div>
+
+                <div class="flex flex-col gap-2 w-full">
+                    <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl text-xs font-semibold">
+                        <span class="text-slate-400">Член БРСМ:</span>
+                        <span [class]="student()?.brsmMember ? 'text-emerald-600' : 'text-rose-500'">
+                            {{ student()?.brsmMember ? 'Да' : 'Нет' }}
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl text-xs font-semibold">
+                        <span class="text-slate-400">Посещено мероприятий:</span>
+                        <span class="text-[var(--p-primary-500)] text-sm font-bold">
+                            {{ student()?.eventsCount || 0 }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md:col-span-2">
+
+                @if (!isEditMode()) {
+                    <div class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm space-y-6 md:p-8">
+                        <div>
+                            <h4 class="text-[11px] font-black tracking-widest text-slate-400 uppercase mb-3">Личные данные</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-xs text-slate-400">ФИО</p>
+                                    <p class="text-sm font-bold text-slate-700">{{ student()?.surname }} {{ student()?.name }} {{ student()?.patronymic }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-400">Факультет</p>
+                                    <p class="text-sm font-bold text-slate-700">{{ student()?.faculty }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-slate-50 pt-4">
+                            <h4 class="text-[11px] font-black tracking-widest text-slate-400 uppercase mb-3">Контакты</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-xs text-slate-400">Телефон</p>
+                                    <p class="text-sm font-bold text-slate-700">{{ student()?.phoneNumber || 'Не указан' }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-400">Telegram</p>
+                                    <p class="text-sm font-bold text-slate-700">
+                                        {{ student()?.telegramUsername ? student()?.telegramUsername : 'Не указан' }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-400">Email</p>
+                                    <p class="text-sm font-bold text-slate-700">
+                                        {{ student()?.email ? student()?.email : 'Не указан' }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-slate-50 pt-4">
+                            <h4 class="text-[11px] font-black tracking-widest text-slate-400 uppercase mb-3">Размещение</h4>
+                            <div>
+                                @if (student()?.dormitoryResidence) {
+                                    <div class="flex gap-6">
+                                        <div>
+                                            <p class="text-xs text-slate-400">Номер общежития</p>
+                                            <p class="text-sm font-bold text-slate-700">№ {{ student()?.dormNumber }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-slate-400">Номер блока</p>
+                                            <p class="text-sm font-bold text-slate-700">{{ student()?.dormBlockNumber }}</p>
+                                        </div>
+                                    </div>
+                                } @else {
+                                    <p class="text-sm font-medium text-slate-500 italic">Не проживает в общежитии</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                } @else {
+                    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm md:p-8 space-y-5">
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-[11px] font-black tracking-widest text-slate-400 uppercase">Фамилия *</label>
+                                <input type="text" pInputText formControlName="surname" class="w-full rounded-xl bg-slate-50" [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('surname')}"/>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-[11px] font-black tracking-widest text-slate-400 uppercase">Имя *</label>
+                                <input type="text" pInputText formControlName="name" class="w-full rounded-xl bg-slate-50" [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('name')}"/>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-[11px] font-black tracking-widest text-slate-400 uppercase">Отчество</label>
+                                <input type="text" pInputText formControlName="patronymic" class="w-full rounded-xl bg-slate-50"/>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-[11px] font-black tracking-widest text-slate-400 uppercase">Телефон</label>
+                                <input type="text" pInputText formControlName="phoneNumber" placeholder="+375 (...)" class="w-full rounded-xl bg-slate-50"/>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-[11px] font-black tracking-widest text-slate-400 uppercase">Telegram (username)</label>
+                                <input type="text" pInputText formControlName="telegramUsername" placeholder="@username" class="w-full rounded-xl bg-slate-50"/>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-[11px] font-black tracking-widest text-slate-400 uppercase">Email</label>
+                                <input type="text" pInputText formControlName="email" placeholder="user.name@email.ds" class="w-full rounded-xl bg-slate-50"/>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50/50 p-4">
+                            <div class="flex flex-col gap-0.5">
+                                <span class="text-sm font-bold text-slate-700">Проживание в общежитии</span>
+                                <span class="text-xs text-slate-400">Активируйте, если вы проживаете в общежитии</span>
+                            </div>
+                            <p-toggleswitch formControlName="dormitoryResidence" />
+                        </div>
+
+                        @if (profileForm.get('dormitoryResidence')?.value) {
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 animate-fade-in">
+                                <div class="flex flex-col gap-1.5">
+                                    <label class="text-[11px] font-black tracking-widest text-slate-400 uppercase">Номер общежития *</label>
+                                    <input type="number" pInputText formControlName="dormNumber" placeholder="Например, 1" class="w-full rounded-xl bg-slate-50" [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('dormNumber')}"/>
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                    <label class="text-[11px] font-black tracking-widest text-slate-400 uppercase">Номер блока *</label>
+                                    <input type="text" pInputText formControlName="dormBlockNumber" placeholder="Например, 412а" class="w-full rounded-xl bg-slate-50" [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('dormBlockNumber')}"/>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="mt-6 flex items-center justify-end gap-3 border-t border-slate-100 pt-5">
+                            <p-button
+                                label="Отмена"
+                                severity="secondary"
+                                [disabled]="submitting()"
+                                [outlined]="true"
+                                styleClass="px-5 rounded-xl font-bold"
+                                (onClick)="isEditMode.set(false)" />
+
+                            <p-button
+                                label="Сохранить профиль"
+                                type="submit"
+                                icon="pi pi-check"
+                                [loading]="submitting()"
+                                styleClass="px-6 rounded-xl font-bold shadow-md shadow-blue-100" />
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    }
+</div>

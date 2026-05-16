@@ -5,7 +5,7 @@ export type AllStudents = {
     surname: string;
     name: string;
     patronymic: string;
-    photo: null;
+    photo: string;
     groupNumber: string;
     faculty: FacultyEnum;
     eventsCount: number;
@@ -15,4 +15,5 @@ export type AllStudents = {
     dormNumber?: number;
     phoneNumber?: string;
     telegramUsername?: string;
+    email?: string;
 };

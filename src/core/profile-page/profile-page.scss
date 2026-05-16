@@ -1,0 +1,15 @@
+:host {
+    display: block;
+    background-color: #f8fafc; /* slate-50 background */
+    min-height: 100vh;
+}
+
+/* Фикс для плавного появления блока общежития */
+.animate-fade-in {
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}

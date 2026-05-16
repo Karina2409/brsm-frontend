@@ -74,7 +74,7 @@ export class StudentsPage implements OnInit {
 
     public loadStudents() {
         this.loading.set(true);
-        this.studentsService.findStudentsInfo().subscribe({
+        this.studentsService.getOnlyStudents().subscribe({
             next: (data) => {
                 this.students.set(data);
                 this.applyFilters();
