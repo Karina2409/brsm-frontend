@@ -1,60 +1,92 @@
-<div class="group relative flex flex-col rounded-2xl border border-slate-100 bg-white p-5 transition-all hover:border-[var(--p-primary-200)] hover:shadow-lg">
+<div class="group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-slate-100 bg-gradient-to-b from-white to-slate-50/50 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-100 hover:shadow-[0_20px_40px_-15px_rgba(59,130,246,0.12)]">
 
-    <!-- Индикаторы (Бейджи) -->
-    <div class="mb-4 flex items-start justify-between">
-        <div class="flex flex-wrap gap-2">
-            @if (event().forPetition) {
-                <p-tag severity="warn" value="Ходатайство" [rounded]="true" class="text-[10px] font-bold" />
+    <div class="absolute -right-16 -top-16 h-32 w-32 rounded-full bg-blue-400/10 blur-2xl transition-all duration-500 group-hover:scale-150 group-hover:bg-blue-500/10"></div>
+    <div class="absolute -left-16 -bottom-16 h-32 w-32 rounded-full bg-indigo-400/5 blur-2xl transition-all duration-500 group-hover:scale-150 group-hover:bg-indigo-500/10"></div>
+
+    <div class="relative z-10 flex h-full flex-col justify-between">
+        <div class="mb-5 flex items-center justify-between">
+            <div class="flex flex-wrap gap-1.5">
+                @if (event().forPetition) {
+                    <span class="inline-flex items-center rounded-xl bg-amber-500/10 px-2.5 py-1 text-[10px] font-black tracking-wider text-amber-600 uppercase">
+                        <span class="mr-1 h-1 w-1 rounded-full bg-amber-500 animate-pulse"></span>
+                        Ходатайство
+                    </span>
+                }
+                <span class="inline-flex items-center rounded-xl bg-blue-500 px-2.5 py-1 text-[10px] font-black tracking-wider text-white uppercase shadow-sm shadow-blue-100 group-hover:bg-indigo-600 transition-colors">
+                    +{{ event().optCount }} ОПТ
+                </span>
+            </div>
+
+            <div class="text-right">
+                <p class="text-[9px] font-black uppercase tracking-widest text-slate-400">Доступно мест</p>
+                <p class="text-sm font-black tracking-tight" [ngClass]="isFull ? 'text-rose-500' : 'text-slate-800'">
+                    {{ event().studentCount - event().studentsRegistered }} <span class="text-xs font-medium text-slate-400">из {{ event().studentCount }}</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="mb-5 flex-1">
+            <h3 class="mb-4 line-clamp-2 text-base font-extrabold leading-snug tracking-tight text-slate-800 transition-colors group-hover:text-blue-600">
+                {{ event().name }}
+            </h3>
+
+            <div class="space-y-2 rounded-2xl bg-white/60 p-3 border border-slate-100 backdrop-blur-sm shadow-inner">
+                <div class="flex items-center gap-2 text-xs font-bold text-slate-600">
+                    <div class="flex h-5 w-5 items-center justify-center rounded-lg bg-blue-50 text-blue-500">
+                        <i class="pi pi-calendar text-[10px]"></i>
+                    </div>
+                    <span>{{ event().date | date: 'dd MMMM, yyyy' }}</span>
+                    <span class="text-slate-300">•</span>
+                    <span>{{ event().time }}</span>
+                </div>
+
+                <div class="flex items-center gap-2 text-xs font-semibold text-slate-500 max-w-full">
+                    <div class="flex h-5 w-5 items-center justify-center rounded-lg bg-emerald-50 text-emerald-500">
+                        <i class="pi pi-map-marker text-[10px]"></i>
+                    </div>
+                    <span class="truncate block w-full" [pTooltip]="event().place" tooltipPosition="bottom">
+                        {{ event().place }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4 space-y-1">
+            <div class="flex justify-between text-[10px] font-bold text-slate-400">
+                <span>Заполнено</span>
+                <span>{{ fillPercentage | number:'1.0-0' }}%</span>
+            </div>
+            <div class="h-2 w-full overflow-hidden rounded-full bg-slate-100 p-0.5">
+                <div class="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-500 ease-out"
+                     [style.width.%]="fillPercentage"
+                     [class.from-rose-500]="isFull" [class.to-rose-600]="isFull">
+                </div>
+            </div>
+        </div>
+
+        <div>
+            @if (isRegistered()) {
+                <p-button
+                    label="Отменить запись"
+                    icon="pi pi-times-circle"
+                    severity="danger"
+                    [loading]="loading()"
+                    (onClick)="onAction.emit(event().eventId)"
+                    styleClass="w-full py-3 font-bold rounded-2xl text-xs tracking-wide bg-rose-50 text-rose-600 border-none hover:bg-rose-100 transition-all" />
+            } @else if (isFull) {
+                <p-button
+                    label="Свободных мест нет"
+                    icon="pi pi-exclamation-triangle"
+                    [disabled]="true"
+                    styleClass="w-full py-3 font-bold rounded-2xl text-xs bg-slate-100 text-slate-400 border-none" />
+            } @else {
+                <p-button
+                    label="Записаться на мероприятие"
+                    icon="pi pi-sparkles"
+                    [loading]="loading()"
+                    (onClick)="onAction.emit(event().eventId)"
+                    styleClass="w-full py-3 font-black rounded-2xl text-xs tracking-wide bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-none hover:opacity-95 shadow-md shadow-blue-200/50 hover:shadow-lg hover:shadow-blue-200 transition-all" />
             }
-            <p-tag severity="info" [value]="'+' + event().optCount + ' опт.'" [rounded]="true" />
-        </div>
-
-        <div class="flex flex-col items-end">
-            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Места</span>
-            <span class="text-sm font-black" [ngClass]="isFull ? 'text-red-500' : 'text-slate-700'">
-                {{ event().studentsRegistered }} / {{ event().studentCount }}
-            </span>
         </div>
     </div>
-
-    <!-- Основная информация -->
-    <div class="mb-6 flex-1">
-        <h3 class="mb-3 text-lg font-black leading-tight text-slate-800 group-hover:text-[var(--p-primary-600)] transition-colors">
-            {{ event().name }}
-        </h3>
-
-        <div class="space-y-2">
-            <div class="flex items-center gap-2 text-sm text-slate-500">
-                <i class="pi pi-calendar text-[var(--p-primary-500)]"></i>
-                <span>{{ event().date | date: 'dd.MM.yyyy' }}</span>
-                <span class="mx-1">•</span>
-                <i class="pi pi-clock text-[var(--p-primary-500)]"></i>
-                <span>{{ event().time }}</span>
-            </div>
-
-            <div class="flex items-center gap-2 text-sm text-slate-500">
-                <i class="pi pi-map-marker text-[var(--p-primary-500)]"></i>
-                <span class="truncate" [pTooltip]="event().place">{{ event().place }}</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Прогресс-бар заполненности -->
-    <div class="mb-5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-        <div class="h-full bg-[var(--p-primary-500)] transition-all duration-500"
-             [style.width.%]="fillPercentage"
-             [class.bg-red-500]="isFull">
-        </div>
-    </div>
-
-    <!-- Кнопка действия -->
-    <p-button
-        [label]="isRegistered() ? 'Отменить запись' : (isFull ? 'Мест нет' : 'Записаться')"
-        [icon]="isRegistered() ? 'pi pi-times' : 'pi pi-check-circle'"
-        [outlined]="isRegistered()"
-        [severity]="isRegistered() ? 'danger' : 'primary'"
-        [disabled]="!isRegistered() && isFull"
-        [loading]="loading()"
-        (onClick)="onAction.emit(event().eventId)"
-        styleClass="w-full py-3 font-bold rounded-xl" />
 </div>

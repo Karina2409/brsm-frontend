@@ -1,22 +1,12 @@
 <p-toast />
 
-<div class="mx-auto max-w-7xl px-4 py-8">
-    <div class="mb-8 flex items-center justify-between">
-        <div>
-            <h1 class="text-3xl font-black tracking-tight text-slate-800 uppercase">
-                Предстоящие мероприятия
-            </h1>
-            <p class="text-slate-500">Записывайтесь и получайте бонусы к рейтингу</p>
-        </div>
-
-        <div class="hidden sm:flex items-center gap-3 rounded-2xl bg-white p-2 shadow-sm border border-slate-100">
-            <span class="pl-3 text-xs font-bold text-slate-400 uppercase">Статус:</span>
-            <div class="flex items-center gap-2 rounded-xl bg-green-50 px-3 py-1.5 text-green-600">
-                <i class="pi pi-user text-sm"></i>
-<!--                TODO: выводить реальный статус пользователя-->
-                <span class="text-sm font-bold">Активен</span>
-            </div>
-        </div>
+<div class="mx-auto max-w-7xl flex flex-col gap-6">
+    <div class="flex items-center gap-3">
+        <div class="h-8 w-1.5 rounded-full bg-[var(--p-primary-500)]"></div>
+        <h2 class="text-2xl font-black tracking-tighter text-slate-800 uppercase md:text-3xl">Предстоящие мероприятия</h2>
+        <span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-slate-500">
+                {{ events().length }}
+            </span>
     </div>
 
     @if (loading()) {
