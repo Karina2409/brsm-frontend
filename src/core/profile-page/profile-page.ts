@@ -22,7 +22,6 @@ import {RippleModule} from 'primeng/ripple';
         ToggleSwitchModule,
         RippleModule
     ],
-    providers: [MessageService],
     templateUrl: './profile-page.html',
     styleUrl: './profile-page.scss',
 })

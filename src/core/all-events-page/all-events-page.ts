@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import { EventService } from '@services/event';
 import { Event } from '@interfaces/event';
 import { CardModule } from 'primeng/card';
@@ -13,6 +13,8 @@ import { InputIconModule } from 'primeng/inputicon';
 import { SliderModule } from 'primeng/slider';
 import { DatePickerModule } from 'primeng/datepicker';
 import {EventCardAdmin} from '@components/event-card-admin';
+import {PaginatorModule} from 'primeng/paginator';
+import {PaginatorState} from 'primeng/types/paginator';
 
 @Component({
     selector: 'app-all-events-page',
@@ -28,26 +30,29 @@ import {EventCardAdmin} from '@components/event-card-admin';
         InputIconModule,
         SliderModule,
         DatePickerModule,
+        PaginatorModule,
         EventCardAdmin,
     ],
     templateUrl: './all-events-page.html',
     styleUrl: './all-events-page.scss',
 })
 export class AllEventsPage implements OnInit {
-    allEvents: Event[] = [];
-    filteredEvents: Event[] = [];
-    loading = true;
-    showFilters = false;
-    error = '';
+    private eventService = inject(EventService);
 
-    filterState = {
-        search: '',
-        petition: null as boolean | null,
-        optRange: [0, 20],
-        studentRange: [0, 100],
-        dateRange: null as Date[] | null,
-        timeStatus: 'all',
-    };
+    public allEvents = signal<Event[]>([]);
+    public loading = signal<boolean>(true);
+    public showFilters = signal<boolean>(false);
+    public error = signal<string>('');
+
+    public first = signal<number>(0);
+    public rows = signal<number>(10);
+
+    public searchFilter = signal<string>('');
+    public petitionFilter = signal<boolean | null>(null);
+    public optRangeFilter = signal<number[]>([0, 20]);
+    public studentRangeFilter = signal<number[]>([0, 200]);
+    public dateRangeFilter = signal<Date[] | null>(null);
+    public timeStatusFilter = signal<string>('all');
 
     petitionOptions = [
         { label: 'Все', value: null },
@@ -61,7 +66,44 @@ export class AllEventsPage implements OnInit {
         { label: 'Прошедшие', value: 'past' },
     ];
 
-    private eventService = inject(EventService);
+    public filteredEvents = computed(() => {
+        const events = this.allEvents();
+        const search = this.searchFilter().trim().toLowerCase();
+        const petition = this.petitionFilter();
+        const optRange = this.optRangeFilter();
+        const studentRange = this.studentRangeFilter();
+        const dateRange = this.dateRangeFilter();
+        const timeStatus = this.timeStatusFilter();
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        return events.filter((event) => {
+            const eventDate = new Date(event.date);
+
+            const matchesSearch = !search || event.name.toLowerCase().includes(search);
+            const matchesPetition = petition === null || event.forPetition === petition;
+            const matchesOpt = event.optCount >= optRange[0] && event.optCount <= optRange[1];
+            const matchesStudents = event.studentCount >= studentRange[0] && event.studentCount <= studentRange[1];
+
+            let matchesStatus = true;
+            if (timeStatus === 'upcoming') matchesStatus = eventDate >= today;
+            if (timeStatus === 'past') matchesStatus = eventDate < today;
+
+            let matchesDateRange = true;
+            if (dateRange && dateRange[0] && dateRange[1]) {
+                matchesDateRange = eventDate >= dateRange[0] && eventDate <= dateRange[1];
+            }
+
+            return matchesSearch && matchesPetition && matchesOpt && matchesStudents && matchesStatus && matchesDateRange;
+        });
+    });
+
+    public paginatedEvents = computed(() => {
+        const start = this.first();
+        const end = start + this.rows();
+        return this.filteredEvents().slice(start, end);
+    });
 
     ngOnInit(): void {
         this.loadEvents();
@@ -70,62 +112,32 @@ export class AllEventsPage implements OnInit {
     loadEvents() {
         this.eventService.getAll().subscribe({
             next: (data) => {
-                this.allEvents = data;
-                this.applyFilters();
-                this.loading = false;
+                this.allEvents.set(data);
+                this.loading.set(false);
             },
             error: () => {
-                this.error = 'Ошибка загрузки мероприятий';
-                this.loading = false;
+                this.error.set('Ошибка загрузки мероприятий');
+                this.loading.set(false);
             },
         });
     }
 
-    applyFilters() {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        this.filteredEvents = this.allEvents.filter((event) => {
-            const eventDate = new Date(event.date);
-
-            const matchesSearch =
-                !this.filterState.search || event.name.toLowerCase().includes(this.filterState.search.toLowerCase());
-
-            const matchesPetition =
-                this.filterState.petition === null || event.forPetition === this.filterState.petition;
-
-            const matchesOpt =
-                event.optCount >= this.filterState.optRange[0] && event.optCount <= this.filterState.optRange[1];
-
-            const matchesStudents =
-                event.studentCount >= this.filterState.studentRange[0] &&
-                event.studentCount <= this.filterState.studentRange[1];
-
-            let matchesStatus = true;
-            if (this.filterState.timeStatus === 'upcoming') matchesStatus = eventDate >= today;
-            if (this.filterState.timeStatus === 'past') matchesStatus = eventDate < today;
-
-            let matchesDateRange = true;
-            if (this.filterState.dateRange && this.filterState.dateRange[0] && this.filterState.dateRange[1]) {
-                matchesDateRange =
-                    eventDate >= this.filterState.dateRange[0] && eventDate <= this.filterState.dateRange[1];
-            }
-
-            return (
-                matchesSearch && matchesPetition && matchesOpt && matchesStudents && matchesStatus && matchesDateRange
-            );
-        });
+    public onFilterChange(): void {
+        this.first.set(0);
     }
 
-    resetFilters() {
-        this.filterState = {
-            search: '',
-            petition: null,
-            optRange: [0, 20],
-            studentRange: [0, 100],
-            dateRange: null,
-            timeStatus: 'all',
-        };
-        this.applyFilters();
+    public onPageChange(event: PaginatorState): void {
+        this.first.set(event.first ?? 0);
+        this.rows.set(event.rows ?? 10);
+    }
+
+    public resetFilters(): void {
+        this.searchFilter.set('');
+        this.petitionFilter.set(null);
+        this.optRangeFilter.set([0, 20]);
+        this.studentRangeFilter.set([0, 200]);
+        this.dateRangeFilter.set(null);
+        this.timeStatusFilter.set('all');
+        this.first.set(0);
     }
 }

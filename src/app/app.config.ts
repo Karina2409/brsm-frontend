@@ -6,6 +6,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { primeThemeProvider } from './primeng.provider';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from '../shared/interceptors/auth-interceptor';
+import {ConfirmationService, MessageService} from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -14,5 +15,7 @@ export const appConfig: ApplicationConfig = {
         provideAnimationsAsync(),
         provideHttpClient(withInterceptors([authInterceptor])),
         primeThemeProvider,
+        MessageService,
+        ConfirmationService
     ],
 };

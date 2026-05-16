@@ -43,14 +43,10 @@ export class EventsPage implements OnInit {
                 this.registeredEventIds.set(new Set(myEventIds));
                 this.loading.set(false);
             },
-            error: () => this.loading.set(false)
-        })
-        this.eventService.getUpcoming().subscribe({
-            next: (data) => {
-                this.events.set(data);
+            error: () => {
+                this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить данные' });
                 this.loading.set(false);
-            },
-            error: () => this.loading.set(false)
+            }
         });
     }
 

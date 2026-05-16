@@ -27,7 +27,6 @@ import {RippleModule} from 'primeng/ripple';
         ToastModule,
         RippleModule
     ],
-    providers: [MessageService],
     templateUrl: './create-event-page.html',
     styleUrl: './create-event-page.scss',
 })

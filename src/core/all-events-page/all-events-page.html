@@ -4,7 +4,7 @@
             <div class="h-8 w-1.5 rounded-full bg-[var(--p-primary-500)]"></div>
             <h2 class="text-2xl font-black tracking-tighter text-slate-800 uppercase md:text-3xl">Мероприятия</h2>
             <span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-slate-500">
-                {{ filteredEvents.length }}
+                {{ filteredEvents().length }}
             </span>
         </div>
 
@@ -14,17 +14,17 @@
                 <input
                     type="text"
                     pInputText
-                    [(ngModel)]="filterState.search"
-                    (input)="applyFilters()"
+                    [(ngModel)]="searchFilter"
+                    (input)="onFilterChange()"
                     placeholder="Поиск по названию..."
                     class="p-inputtext-sm w-full border-none bg-slate-100 focus:ring-2" />
             </p-iconfield>
             <p-button
-                [icon]="showFilters ? 'pi pi-filter-slash' : 'pi pi-filter'"
-                [label]="showFilters ? 'Скрыть' : 'Фильтры'"
-                [outlined]="!showFilters"
+                [icon]="showFilters() ? 'pi pi-filter-slash' : 'pi pi-filter'"
+                [label]="showFilters() ? 'Скрыть' : 'Фильтры'"
+                [outlined]="!showFilters()"
                 size="small"
-                (onClick)="showFilters = !showFilters" />
+                (onClick)="showFilters.set(!showFilters())" />
             <p-button
                 label="Создать"
                 icon="pi pi-plus"
@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    @if (showFilters) {
+    @if (showFilters()) {
         <div
             class="grid grid-cols-1 gap-8 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-all lg:grid-cols-3 xl:grid-cols-4">
             <div class="space-y-4">
@@ -45,8 +45,8 @@
                     </label>
                     <p-selectButton
                         [options]="timeOptions"
-                        [(ngModel)]="filterState.timeStatus"
-                        (onChange)="applyFilters()"
+                        [(ngModel)]="timeStatusFilter"
+                        (onChange)="onFilterChange()"
                         class="p-selectbutton-sm" />
                 </div>
                 <div class="flex flex-col gap-2">
@@ -54,11 +54,11 @@
                         Точный диапазон дат
                     </label>
                     <p-date-picker
-                        [(ngModel)]="filterState.dateRange"
+                        [(ngModel)]="dateRangeFilter"
                         selectionMode="range"
                         [showIcon]="true"
-                        (onSelect)="applyFilters()"
-                        (onClear)="applyFilters()"
+                        (onSelect)="onFilterChange()"
+                        (onClear)="onFilterChange()"
                         placeholder="Выберите даты"
                         class="w-full"
                         inputStyleClass="p-inputtext-sm bg-slate-50 border-slate-200" />
@@ -69,24 +69,24 @@
                 <label class="text-[10px] font-black tracking-widest text-slate-400 uppercase">Ходатайство</label>
                 <p-selectButton
                     [options]="petitionOptions"
-                    [(ngModel)]="filterState.petition"
-                    (onChange)="applyFilters()" />
+                    [(ngModel)]="petitionFilter"
+                    (onChange)="onFilterChange()" />
             </div>
 
             <div class="flex flex-col gap-4">
                 <div class="flex items-center justify-between">
                     <label class="text-[10px] font-black tracking-widest text-slate-400 uppercase">Диапазон ОПТ</label>
                     <span class="text-xs font-bold text-[var(--p-primary-600)]">
-                        {{ filterState.optRange[0] }} - {{ filterState.optRange[1] }}
+                        {{ optRangeFilter()[0] }} - {{ optRangeFilter()[1] }}
                     </span>
                 </div>
                 <div class="px-2 pt-2">
                     <p-slider
-                        [(ngModel)]="filterState.optRange"
+                        [(ngModel)]="optRangeFilter"
                         [range]="true"
                         [min]="0"
                         [max]="20"
-                        (onChange)="applyFilters()"
+                        (onChange)="onFilterChange()"
                         class="w-full" />
                 </div>
             </div>
@@ -97,16 +97,16 @@
                         Количество мест
                     </label>
                     <span class="text-xs font-bold text-[var(--p-primary-600)]">
-                        {{ filterState.studentRange[0] }} - {{ filterState.studentRange[1] }}
+                        {{ studentRangeFilter()[0] }} - {{ studentRangeFilter()[1] }}
                     </span>
                 </div>
                 <div class="px-2 pt-2">
                     <p-slider
-                        [(ngModel)]="filterState.studentRange"
+                        [(ngModel)]="studentRangeFilter"
                         [range]="true"
                         [min]="0"
                         [max]="200"
-                        (onChange)="applyFilters()"
+                        (onChange)="onFilterChange()"
                         class="w-full" />
                 </div>
             </div>
@@ -124,7 +124,7 @@
     }
 </div>
 
-@if (loading) {
+@if (loading()) {
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         @for (_ of [1, 2, 3, 4, 5, 6]; track $index) {
             <div class="flex flex-col rounded-xl border border-slate-100 bg-white p-5 shadow-sm">
@@ -149,42 +149,50 @@
     </div>
 }
 
-@if (!loading && allEvents.length === 0) {
-    <div
-        class="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 bg-white px-6 py-24 shadow-sm">
-        <div class="relative mb-6">
-            <i class="pi pi-calendar-plus text-6xl text-slate-100"></i>
-            <i class="pi pi-sparkles absolute -top-2 -right-2 text-xl text-[var(--p-primary-400)]"></i>
+@if (!loading()) {
+    @if (allEvents().length === 0) {
+        <div
+            class="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 bg-white px-6 py-24 shadow-sm">
+            <div class="relative mb-6">
+                <i class="pi pi-calendar-plus text-6xl text-slate-100"></i>
+                <i class="pi pi-sparkles absolute -top-2 -right-2 text-xl text-[var(--p-primary-400)]"></i>
+            </div>
+            <h3 class="text-xl font-black tracking-tight text-slate-800">Мероприятий пока нет</h3>
+            <p class="mt-2 mb-8 max-w-[350px] text-center text-slate-500">
+                Похоже, в системе еще не создано ни одного мероприятия. Начните с создания первого мероприятия для
+                студентов.
+            </p>
+            <p-button
+                label="Создать первое мероприятие"
+                icon="pi pi-plus"
+                severity="primary"
+                class="shadow-[var(--p-primary-100)] shadow-lg"
+                [routerLink]="['/events/create']" />
         </div>
-        <h3 class="text-xl font-black tracking-tight text-slate-800">Мероприятий пока нет</h3>
-        <p class="mt-2 mb-8 max-w-[350px] text-center text-slate-500">
-            Похоже, в системе еще не создано ни одного мероприятия. Начните с создания первого мероприятия для
-            студентов.
-        </p>
-        <p-button
-            label="Создать первое мероприятие"
-            icon="pi pi-plus"
-            severity="primary"
-            class="shadow-[var(--p-primary-100)] shadow-lg"
-            [routerLink]="['/events/create']" />
-    </div>
 
-} @else if (!loading && filteredEvents.length === 0) {
-    <div class="col-span-full py-12 text-center">
-        <i class="pi pi-inbox mb-3 text-4xl text-slate-200"></i>
-        <div class="font-medium tracking-wide text-slate-400">Список пуст</div>
-        <button (click)="resetFilters()" class="mt-2 text-sm font-bold text-[var(--p-primary-500)] hover:underline">
-            Показать все мероприятия
-        </button>
-    </div>
-}
+    } @else if (filteredEvents().length === 0) {
+        <div class="col-span-full py-12 text-center">
+            <i class="pi pi-inbox mb-3 text-4xl text-slate-200"></i>
+            <div class="font-medium tracking-wide text-slate-400">Список пуст</div>
+            <button (click)="resetFilters()" class="mt-2 text-sm font-bold text-[var(--p-primary-500)] hover:underline">
+                Показать все мероприятия
+            </button>
+        </div>
+    } @else {
+        <div class="space-y-6">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 animate-[fadeIn_0.3s_ease-out]">
+                @for (event of paginatedEvents(); track event.eventId) {
+                    <app-event-card-admin [event]="event" />
+                }
+            </div>
 
-@if (error) {
-    <div class="error">{{ error }}</div>
-}
-
-<div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-    @for (event of filteredEvents; track event.eventId) {
-        <app-event-card-admin [event]="event"></app-event-card-admin>
+            <p-paginator
+                (onPageChange)="onPageChange($event)"
+                [first]="first()"
+                [rows]="rows()"
+                [totalRecords]="filteredEvents().length"
+                [rowsPerPageOptions]="[10, 25, 100]"
+                class="bg-transparent border-none py-2 font-bold text-xs" />
+        </div>
     }
-</div>
+}

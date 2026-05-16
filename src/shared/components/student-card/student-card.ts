@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import {Component, computed, input} from '@angular/core';
 import { AllStudents } from '@interfaces/all-students';
 import {TooltipModule} from 'primeng/tooltip';
 
@@ -10,4 +10,14 @@ import {TooltipModule} from 'primeng/tooltip';
 })
 export class StudentCard {
     public studentInfo = input<AllStudents>();
+
+    public studentPhoto = computed(() => {
+        const info = this.studentInfo();
+        if (info && info.photo) {
+            return info.photo.startsWith('data:')
+                ? info.photo
+                : `data:image/jpeg;base64,${info.photo}`;
+        }
+        return null;
+    });
 }

@@ -3,8 +3,8 @@
     <div class="flex items-center gap-4 flex-1 min-w-0">
         <div class="relative shrink-0">
             <div class="h-12 w-12 overflow-hidden rounded-full border-2 border-slate-50 bg-slate-50 transition-transform group-hover:scale-105">
-                @if (studentInfo()?.photo) {
-                    <img [src]="studentInfo()?.photo" class="h-full w-full object-cover" alt="Фото" />
+                @if (studentPhoto()) {
+                    <img [src]="studentPhoto()" class="h-full w-full object-cover" alt="Фото" />
                 } @else {
                     <div class="flex h-full w-full items-center justify-center bg-slate-100 text-slate-300">
                         <i class="pi pi-user text-xl"></i>
