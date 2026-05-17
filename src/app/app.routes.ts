@@ -44,8 +44,17 @@ export const routes: Routes = [
     },
     {
         path: 'students',
-        component: StudentsPage,
         canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
+        children: [
+            {
+                path: '',
+                component: StudentsPage,
+            },
+            {
+                path: ':id',
+                loadComponent: () => import('../core/student-detail-page').then(m => m.StudentDetailPage)
+            }
+        ]
     },
     {
         path: 'users',

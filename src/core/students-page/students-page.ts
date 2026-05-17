@@ -16,6 +16,7 @@ import { StudentCard } from '@components/student-card';
 import {PaginatorModule} from 'primeng/paginator';
 import {FacultyEnum} from '@enums/faculty';
 import {PaginatorState} from 'primeng/types/paginator';
+import {RouterModule} from '@angular/router';
 
 @Component({
     selector: 'app-students-page',
@@ -31,7 +32,8 @@ import {PaginatorState} from 'primeng/types/paginator';
         InputTextModule,
         SliderModule,
         PaginatorModule,
-        StudentCard
+        StudentCard,
+        RouterModule
     ],
     templateUrl: './students-page.html',
     styleUrl: './students-page.scss'

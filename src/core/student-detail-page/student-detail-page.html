@@ -1,0 +1,155 @@
+<p-toast />
+
+<div class="mx-auto max-w-5xl px-4 py-8">
+    <div class="mb-8 flex items-center justify-between border-b border-slate-100 pb-5">
+        <div class="flex items-center gap-3">
+            <p-button
+                icon="pi pi-arrow-left"
+                [text]="true"
+                severity="secondary"
+                [routerLink]="['/students']"
+                label="Назад к списку" />
+            <span class="text-slate-300">/</span>
+            <h2 class="text-xl font-black tracking-tighter text-slate-800 uppercase md:text-2xl">
+                Данные студента
+            </h2>
+        </div>
+    </div>
+
+    @if (loading()) {
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-3 animate-pulse">
+            <div class="h-64 rounded-2xl bg-slate-100 md:col-span-1"></div>
+            <div class="h-64 rounded-2xl bg-slate-100 md:col-span-2"></div>
+        </div>
+    } @else {
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+
+            <div class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm text-center flex flex-col items-center h-fit">
+                <div class="w-36 h-36 rounded-full overflow-hidden border-4 border-slate-50 shadow-inner bg-slate-100 flex items-center justify-center mb-4">
+                    @if (photoPreview()) {
+                        <img [src]="photoPreview()" alt="Avatar" class="w-full h-full object-cover">
+                    } @else {
+                        <i class="pi pi-user text-slate-300 text-5xl"></i>
+                    }
+                </div>
+
+                <h3 class="text-lg font-black text-slate-800 leading-tight">
+                    {{ student()?.surname }} {{ student()?.name }}
+                </h3>
+                <p class="text-sm font-medium text-slate-400 mt-1">Группа {{ student()?.groupNumber }}</p>
+
+                <div class="w-full border-t border-slate-100 my-4"></div>
+
+                <div class="flex flex-col gap-2 w-full">
+                    <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl text-xs font-semibold">
+                        <span class="text-slate-400">Член БРСМ:</span>
+                        <span [class]="student()?.brsmMember ? 'text-emerald-600' : 'text-rose-500'">
+                            {{ student()?.brsmMember ? 'Да' : 'Нет' }}
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl text-xs font-semibold">
+                        <span class="text-slate-400">Посещено мероприятий:</span>
+                        <span class="text-[var(--p-primary-500)] text-sm font-bold">
+                            {{ student()?.eventsCount || 0 }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md:col-span-2 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm space-y-6 md:p-8">
+                <div>
+                    <h4 class="text-[11px] font-black tracking-widest text-slate-400 uppercase mb-3">Личные данные</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs text-slate-400">ФИО</p>
+                            <p class="text-sm font-bold text-slate-700">{{ student()?.surname }} {{ student()?.name }} {{ student()?.patronymic }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400">Факультет</p>
+                            <p class="text-sm font-bold text-slate-700">{{ student()?.faculty }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-50 pt-4">
+                    <h4 class="text-[11px] font-black tracking-widest text-slate-400 uppercase mb-3">Контакты</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs text-slate-400">Телефон</p>
+                            <p class="text-sm font-bold text-slate-700">{{ student()?.phoneNumber || 'Не указан' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400">Telegram</p>
+                            <p class="text-sm font-bold text-slate-700">
+                                {{ student()?.telegramUsername ? student()?.telegramUsername : 'Не указан' }}
+                            </p>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <p class="text-xs text-slate-400">Email</p>
+                            <p class="text-sm font-bold text-slate-700">{{ student()?.email || 'Не указан' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-50 pt-4">
+                    <h4 class="text-[11px] font-black tracking-widest text-slate-400 uppercase mb-3">Размещение</h4>
+                    <div>
+                        @if (student()?.dormitoryResidence) {
+                            <div class="flex gap-6">
+                                <div>
+                                    <p class="text-xs text-slate-400">Номер общежития</p>
+                                    <p class="text-sm font-bold text-slate-700">№ {{ student()?.dormNumber }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-400">Номер блока</p>
+                                    <p class="text-sm font-bold text-slate-700">{{ student()?.dormBlockNumber }}</p>
+                                </div>
+                            </div>
+                        } @else {
+                            <p class="text-sm font-medium text-slate-500 italic">Не проживает в общежитии</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm md:p-8">
+            <div class="flex items-center gap-2 mb-4 border-b border-slate-50 pb-3">
+                <i class="pi pi-calendar text-lg text-[var(--p-primary-500)]"></i>
+                <h3 class="text-lg font-black text-slate-800 uppercase tracking-tight">История участия в мероприятиях</h3>
+                <span class="ml-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-500">
+                    {{ studentEvents().length }}
+                </span>
+            </div>
+
+            @if (studentEvents().length > 0) {
+                <div class="space-y-3">
+                    @for (event of studentEvents(); track event.eventId) {
+                        <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors">
+                            <div>
+                                <p class="font-bold text-slate-700 text-sm md:text-base">{{ event.name }}</p>
+                                <p class="text-xs text-slate-400 mt-0.5">Дата проведения: {{ event.date }}</p>
+                            </div>
+                            <span class="px-2.5 py-1 text-xs font-black rounded-lg bg-blue-50 text-blue-600 uppercase tracking-wider">
+                                @if (getRegistrationStatus(event) === 'ATTENDED') {
+                                    <span class="px-2.5 py-1 text-[10px] font-black rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-100 uppercase tracking-wider">
+                                        Посещено
+                                    </span>
+                                } @else {
+                                    <span class="px-2.5 py-1 text-[10px] font-black rounded-lg bg-blue-50 text-blue-600 border border-blue-100 uppercase tracking-wider">
+                                        Зарегистрирован
+                                    </span>
+                                }
+                            </span>
+                        </div>
+                    }
+                </div>
+            } @else {
+                <div class="text-center py-8 text-slate-400">
+                    <i class="pi pi-calendar-times text-3xl mb-2 block text-slate-200"></i>
+                    <p class="text-sm font-medium">Студент еще не зарегистрирован ни на одно мероприятие</p>
+                </div>
+            }
+        </div>
+    }
+</div>

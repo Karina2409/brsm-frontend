@@ -2,6 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import { AllStudents } from '@interfaces/all-students';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {Event} from '@interfaces/event';
 
 @Injectable({
     providedIn: 'root',
