@@ -131,12 +131,12 @@ export const routes: Routes = [
         loadComponent: () => import('@pages/my-settings-page').then(m => m.MySettingsPage),
         canActivate: [authGuard],
     },
-    // {
-    //     path: '404',
-    //     component: NotFoundPage
-    // },
-    // {
-    //     path: '**',
-    //     redirectTo: '404'
-    // }
+    {
+        path: '404',
+        loadComponent: () => import('@pages/not-found-page').then(m => m.NotFoundPage),
+    },
+    {
+        path: '**',
+        redirectTo: '404'
+    }
 ];
