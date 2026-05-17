@@ -76,17 +76,41 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <p class="text-xs text-slate-400">Телефон</p>
-                            <p class="text-sm font-bold text-slate-700">{{ student()?.phoneNumber || 'Не указан' }}</p>
+                            @if (student()?.phoneNumber) {
+                                <a [href]="'tel:' + student()?.phoneNumber"
+                                   class="text-sm font-bold text-[var(--p-primary-600)] hover:underline transition-all inline-flex items-center gap-1 mt-0.5">
+                                    <i class="pi pi-phone text-xs"></i>
+                                    {{ student()?.phoneNumber }}
+                                </a>
+                            } @else {
+                                <p class="text-sm font-bold text-slate-700 mt-0.5">Не указан</p>
+                            }
                         </div>
                         <div>
                             <p class="text-xs text-slate-400">Telegram</p>
-                            <p class="text-sm font-bold text-slate-700">
-                                {{ student()?.telegramUsername ? student()?.telegramUsername : 'Не указан' }}
-                            </p>
+                            @if (student()?.telegramUsername) {
+                                <a [href]="'https://t.me/' + student()?.telegramUsername?.replace('@', '')"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="text-sm font-bold text-[var(--p-primary-600)] hover:underline transition-all inline-flex items-center gap-1 mt-0.5">
+                                    <i class="pi pi-send text-xs"></i>
+                                    {{ student()?.telegramUsername?.startsWith('@') ? student()?.telegramUsername : '@' + student()?.telegramUsername }}
+                                </a>
+                            } @else {
+                                <p class="text-sm font-bold text-slate-700 mt-0.5">Не указан</p>
+                            }
                         </div>
                         <div class="sm:col-span-2">
                             <p class="text-xs text-slate-400">Email</p>
-                            <p class="text-sm font-bold text-slate-700">{{ student()?.email || 'Не указан' }}</p>
+                            @if (student()?.email) {
+                                <a [href]="'mailto:' + student()?.email"
+                                   class="text-sm font-bold text-[var(--p-primary-600)] hover:underline transition-all inline-flex items-center gap-1 mt-0.5">
+                                    <i class="pi pi-envelope text-xs"></i>
+                                    {{ student()?.email }}
+                                </a>
+                            } @else {
+                                <p class="text-sm font-bold text-slate-700 mt-0.5">Не указан</p>
+                            }
                         </div>
                     </div>
                 </div>
