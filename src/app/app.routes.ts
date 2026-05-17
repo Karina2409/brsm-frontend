@@ -1,29 +1,9 @@
 import { Routes } from '@angular/router';
-import { ProfilePage } from '@pages/profile-page';
-import { StudentsPage } from '@pages/students-page';
-import { UsersPage } from '@pages/users-page';
-import { AllEventsPage } from '@pages/all-events-page';
-import { DocumentsPage } from '@pages/documents-page';
-import { StatisticsPage } from '@pages/statistics-page';
-import { CalendarPage } from '@pages/calendar-page';
-import { PetitionsPage } from '@pages/petitions-page';
-import { ReportsPage } from '@pages/reports-page';
-import { ExemptionsPage } from '@pages/exemptions-page';
-import { SettingsPage } from '@pages/settings-page';
-import { UserActionsPage } from '@pages/user-actions-page';
-import { MainPage } from '@pages/main-page';
-import { Login } from '@pages/login-page';
 import { Role } from '@enums/role';
-import { MyEventsPage } from '@pages/my-events-page';
-import { MySettingsPage } from '@pages/my-settings-page';
-import { EventsPage } from '@pages/events-page';
-import { CreateEventPage } from '@pages/create-event-page';
-import { EventDetailPage } from '@pages/event-detail-page';
 import { guestGuard } from '@guards/guest-guard';
 import { authGuard } from '@guards/auth-guard';
 import { roleGuard } from '@guards/role-guard';
 import { eventsRedirectGuard } from '@guards/events-redirect-guard';
-import {EventParticipantsPage} from '@pages/event-participants-page';
 import {numberIdGuard} from '@guards/number-id-guard';
 
 export const routes: Routes = [
@@ -34,12 +14,12 @@ export const routes: Routes = [
     },
     {
         path: 'login',
-        component: Login,
+        loadComponent: () => import('@pages/login-page').then(m => m.Login),
         canActivate: [guestGuard],
     },
     {
         path: 'profile',
-        component: ProfilePage,
+        loadComponent: () => import('@pages/profile-page').then(m => m.ProfilePage),
         canActivate: [authGuard],
     },
     {
@@ -48,27 +28,27 @@ export const routes: Routes = [
         children: [
             {
                 path: '',
-                component: StudentsPage,
+                loadComponent: () => import('@pages/students-page').then(m => m.StudentsPage)
             },
             {
                 path: ':id',
-                loadComponent: () => import('../core/student-detail-page').then(m => m.StudentDetailPage)
+                loadComponent: () => import('@pages/student-detail-page').then(m => m.StudentDetailPage)
             }
         ]
     },
     {
         path: 'users',
-        component: UsersPage,
+        loadComponent: () => import('@pages/users-page').then(m => m.UsersPage),
         canActivate: [roleGuard([Role.CHIEF_SECRETARY])],
     },
     {
         path: 'settings',
-        component: SettingsPage,
+        loadComponent: () => import('@pages/settings-page').then(m => m.SettingsPage),
         canActivate: [roleGuard([Role.CHIEF_SECRETARY])],
     },
     {
         path: 'user-actions',
-        component: UserActionsPage,
+        loadComponent: () => import('@pages/user-actions-page').then(m => m.UserActionsPage),
         canActivate: [roleGuard([Role.CHIEF_SECRETARY])],
     },
     {
@@ -77,83 +57,78 @@ export const routes: Routes = [
         children: [
             {
                 path: '',
-                component: EventsPage,
+                loadComponent: () => import('@pages/events-page').then(m => m.EventsPage),
                 canActivate: [eventsRedirectGuard, roleGuard([Role.STUDENT])],
             },
             {
                 path: 'all',
-                component: AllEventsPage,
+                loadComponent: () => import('@pages/all-events-page').then(m => m.AllEventsPage),
                 canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
             },
             {
                 path: 'create',
-                component: CreateEventPage,
+                loadComponent: () => import('@pages/create-event-page').then(m => m.CreateEventPage),
                 canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
             },
             {
                 path: ':id',
-                component: EventDetailPage,
+                loadComponent: () => import('@pages/event-detail-page').then(m => m.EventDetailPage),
                 canActivate: [numberIdGuard, roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
             },
             {
                 path: ':id/edit',
-                component: CreateEventPage,
+                loadComponent: () => import('@pages/create-event-page').then(m => m.CreateEventPage),
                 canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
             },
             {
                 path: ':id/participants',
-                component: EventParticipantsPage,
+                loadComponent: () => import('@pages/event-participants-page').then(m => m.EventParticipantsPage),
                 canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])]
             }
         ],
     },
     {
         path: 'documents',
-        component: DocumentsPage,
+        loadComponent: () => import('@pages/documents-page').then(m => m.DocumentsPage),
         canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
         children: [
             {
                 path: 'petitions',
-                component: PetitionsPage,
+                loadComponent: () => import('@pages/petitions-page').then(m => m.PetitionsPage),
             },
             {
                 path: 'reports',
-                component: ReportsPage,
+                loadComponent: () => import('@pages/reports-page').then(m => m.ReportsPage),
             },
             {
                 path: 'exemptions',
-                component: ExemptionsPage,
+                loadComponent: () => import('@pages/exemptions-page').then(m => m.ExemptionsPage),
             },
         ],
     },
     {
         path: 'statistic',
-        component: StatisticsPage,
+        loadComponent: () => import('@pages/statistics-page').then(m => m.StatisticsPage),
         canActivate: [roleGuard([Role.SECRETARY, Role.CHIEF_SECRETARY])],
     },
     {
         path: 'calendar',
-        component: CalendarPage,
+        loadComponent: () => import('@pages/calendar-page').then(m => m.CalendarPage),
         canActivate: [authGuard],
     },
     {
         path: 'main',
-        component: MainPage,
-        canActivate: [roleGuard([Role.STUDENT])],
-    },
-    {
-        path: 'events',
-        component: EventsPage,
+        loadComponent: () => import('@pages/main-page').then(m => m.MainPage),
         canActivate: [roleGuard([Role.STUDENT])],
     },
     {
         path: 'my-events',
-        component: MyEventsPage,
+        loadComponent: () => import('@pages/my-events-page').then(m => m.MyEventsPage),
         canActivate: [roleGuard([Role.STUDENT])],
     },
     {
         path: 'my-settings',
-        component: MySettingsPage,
+        loadComponent: () => import('@pages/my-settings-page').then(m => m.MySettingsPage),
         canActivate: [authGuard],
     },
     // {
